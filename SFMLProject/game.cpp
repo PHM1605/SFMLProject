@@ -1,26 +1,42 @@
 #include "game.hpp"
 #include <iostream>
 
+const float Game::playerSpeed = 100.f;
+const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
+
 Game::Game()
 	: mWindow(sf::VideoMode(640, 480), "SFML Application"),
+	mTexture(),
 	mPlayer(),
 	mIsMovingDown(false),
 	mIsMovingLeft(false),
 	mIsMovingUp(false),
 	mIsMovingRight(false),
-	playerSpeed(50.f) //  50 pixels per second
+	mFont(),
+	mStatisticsText(),
+	mStatisticsUpdateTime(),
+	mStatisticsNumFrames(0)
 {
-	mPlayer.setRadius(40.f);
+	if (!mTexture.loadFromFile("Media/Textures/Eagle.png")) {
+	}
+	mPlayer.setTexture(mTexture);
 	mPlayer.setPosition(100.f, 100.f);
-	mPlayer.setFillColor(sf::Color::Cyan);
+	mFont.loadFromFile("Media/Sansation.ttf");
+	mStatisticsText.setFont(mFont);
+	mStatisticsText.setPosition(5.f, 5.f);
+	mStatisticsText.setCharacterSize(10);
 }
 
 void Game::run() {
 	sf::Clock clock;
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen()) {
-		sf::Time deltaTime = clock.restart();
-		processEvents();
-		update(deltaTime);
+		timeSinceLastUpdate += clock.restart();
+		while (timeSinceLastUpdate > timePerFrame) {
+			timeSinceLastUpdate -= timePerFrame;
+			processEvents();
+			update(timePerFrame);
+		}
 		render();
 	}
 }
