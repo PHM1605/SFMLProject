@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "StringHelpers.hpp"
 #include <iostream>
 
 const float Game::playerSpeed = 100.f;
@@ -31,12 +32,14 @@ void Game::run() {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen()) {
-		timeSinceLastUpdate += clock.restart();
+		sf::Time elapsedTime = clock.restart();
+		timeSinceLastUpdate += elapsedTime;
 		while (timeSinceLastUpdate > timePerFrame) {
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
 			update(timePerFrame);
 		}
+		updateStatistics(elapsedTime);
 		render();
 	}
 }
@@ -84,6 +87,18 @@ void Game::update(sf::Time deltaTime) {
 	if (mIsMovingRight)
 		movement.x += playerSpeed;
 	mPlayer.move(movement * deltaTime.asSeconds());
+}
+
+void Game::updateStatistics(sf::Time elapsedTime) {
+	mStatisticsUpdateTime += elapsedTime;
+	mStatisticsNumFrames += 1;
+	if (mStatisticsUpdateTime >= sf::seconds(1.0f)) {
+		mStatisticsText.setString(
+			"Frames/Second = " + toString(mStatisticsNumFrames) + "\n" +
+			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us");
+		mStatisticsUpdateTime -= sf::seconds(1.0f);
+		mStatisticsNumFrames = 0;
+	}
 }
 
 void Game::render() {
