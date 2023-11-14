@@ -146,6 +146,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
+    <None Include="sfml-audio-s-d.pdb" />
+    <None Include="sfml-audio-s.pdb" />
+    <None Include="sfml-audio.pdb" />
+    <None Include="sfml-graphics-s-d.pdb" />
+    <None Include="sfml-graphics-s.pdb" />
+    <None Include="sfml-graphics.pdb" />
+    <None Include="sfml-main-d.pdb" />
+    <None Include="sfml-main-s.pdb" />
+    <None Include="sfml-network-s-d.pdb" />
+    <None Include="sfml-network-s.pdb" />
+    <None Include="sfml-network.pdb" />
+    <None Include="sfml-system-s-d.pdb" />
+    <None Include="sfml-system-s.pdb" />
+    <None Include="sfml-system.pdb" />
+    <None Include="sfml-window-s-d.pdb" />
+    <None Include="sfml-window-s.pdb" />
+    <None Include="sfml-window.pdb" />
     <None Include="StringHelpers.inl" />
   </ItemGroup>
   <ItemGroup>

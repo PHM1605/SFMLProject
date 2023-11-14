@@ -104,5 +104,6 @@ void Game::updateStatistics(sf::Time elapsedTime) {
 void Game::render() {
 	mWindow.clear();
 	mWindow.draw(mPlayer);
+	mWindow.draw(mStatisticsText);
 	mWindow.display();
 }
