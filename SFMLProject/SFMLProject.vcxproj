@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="game.hpp" />
     <ClInclude Include="StringHelpers.hpp" />
+    <ClInclude Include="ResourceHolder.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />

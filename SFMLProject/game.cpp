@@ -7,23 +7,19 @@ const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
 	: mWindow(sf::VideoMode(640, 480), "SFML Application"),
-	mTexture(),
-	mPlayer(),
 	mIsMovingDown(false),
 	mIsMovingLeft(false),
 	mIsMovingUp(false),
 	mIsMovingRight(false),
-	mFont(),
-	mStatisticsText(),
-	mStatisticsUpdateTime(),
 	mStatisticsNumFrames(0)
 {
-	if (!mTexture.loadFromFile("Media/Textures/Eagle.png")) {
-	}
-	mPlayer.setTexture(mTexture);
-	mPlayer.setPosition(100.f, 100.f);
-	mFont.loadFromFile("Media/Sansation.ttf");
-	mStatisticsText.setFont(mFont);
+	textures.load(Textures::Landscape, "Media/Textures/Desert.png");
+	textures.load(Textures::Airplane, "Media/Textures/Eagle.png");
+	landscape.setTexture(textures.get(Textures::Landscape));
+	airplane.setTexture(textures.get(Textures::Airplane));
+	airplane.setPosition(100.f, 100.f);
+	fonts.load(Fonts::Sansation, "Media/Sansation.ttf");
+	mStatisticsText.setFont(fonts.get(Fonts::Sansation));
 	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(10);
 }
@@ -86,7 +82,7 @@ void Game::update(sf::Time deltaTime) {
 		movement.x -= playerSpeed;
 	if (mIsMovingRight)
 		movement.x += playerSpeed;
-	mPlayer.move(movement * deltaTime.asSeconds());
+	airplane.move(movement * deltaTime.asSeconds());
 }
 
 void Game::updateStatistics(sf::Time elapsedTime) {
@@ -103,7 +99,9 @@ void Game::updateStatistics(sf::Time elapsedTime) {
 
 void Game::render() {
 	mWindow.clear();
-	mWindow.draw(mPlayer);
+	mWindow.draw(landscape);
+	mWindow.draw(airplane);
+
 	mWindow.draw(mStatisticsText);
 	mWindow.display();
 }

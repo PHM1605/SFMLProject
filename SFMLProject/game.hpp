@@ -1,7 +1,9 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#pragma once
 #include <SFML/Graphics.hpp>
+#include "ResourceHolder.hpp"
 
 class Game {
 public: 
@@ -18,9 +20,13 @@ private:
 	bool mIsMovingUp, mIsMovingDown, mIsMovingLeft, mIsMovingRight;
 	static const float playerSpeed; 
 	static const sf::Time timePerFrame;
-	sf::Texture mTexture;
-	sf::Sprite mPlayer;
-	sf::Font mFont;
+
+	ResourceHolder<sf::Texture, Textures::ID> textures;
+	sf::Sprite landscape;
+	sf::Sprite airplane;
+
+	ResourceHolder<sf::Font, Fonts::ID> fonts;
+
 	sf::Text mStatisticsText;
 	sf::Time mStatisticsUpdateTime;
 	std::size_t mStatisticsNumFrames;
