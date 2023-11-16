@@ -4,6 +4,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "ResourceHolder.hpp"
+#include "World.hpp"
 
 class Game {
 public: 
@@ -17,6 +18,7 @@ private:
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 private:
 	sf::RenderWindow mWindow;
+	World mWorld;
 	bool mIsMovingUp, mIsMovingDown, mIsMovingLeft, mIsMovingRight;
 	static const float playerSpeed; 
 	static const sf::Time timePerFrame;

@@ -7,16 +7,17 @@ const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
 	: mWindow(sf::VideoMode(640, 480), "SFML Application"),
+	mWorld(mWindow),
 	mIsMovingDown(false),
 	mIsMovingLeft(false),
 	mIsMovingUp(false),
 	mIsMovingRight(false),
 	mStatisticsNumFrames(0)
 {
-	textures.load(Textures::Landscape, "Media/Textures/Desert.png");
-	textures.load(Textures::Airplane, "Media/Textures/Eagle.png");
-	landscape.setTexture(textures.get(Textures::Landscape));
-	airplane.setTexture(textures.get(Textures::Airplane));
+	textures.load(Textures::Desert, "Media/Textures/Desert.png");
+	textures.load(Textures::Raptor, "Media/Textures/Eagle.png");
+	landscape.setTexture(textures.get(Textures::Desert));
+	airplane.setTexture(textures.get(Textures::Raptor));
 	airplane.setPosition(100.f, 100.f);
 	fonts.load(Fonts::Sansation, "Media/Sansation.ttf");
 	mStatisticsText.setFont(fonts.get(Fonts::Sansation));

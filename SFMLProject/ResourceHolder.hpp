@@ -7,7 +7,7 @@
 #include <SFML/Graphics.hpp>
 
 namespace Textures {
-	enum ID { Landscape, Airplane, Missle };
+	enum ID { Eagle, Raptor, Desert };
 }
 
 namespace Fonts {
@@ -53,5 +53,7 @@ public:
 		return *found->second;
 	}
 };
+
+typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
 
 #endif

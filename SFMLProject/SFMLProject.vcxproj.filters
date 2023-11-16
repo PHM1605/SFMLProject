@@ -27,6 +27,15 @@
     <ClCompile Include="Aircraft.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.hpp">
@@ -44,6 +53,15 @@
     <ClInclude Include="Aircraft.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SceneNode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="World.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteNode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
@@ -53,5 +71,16 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="Media\Sansation.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Media\Textures\Desert.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Eagle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Raptor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
