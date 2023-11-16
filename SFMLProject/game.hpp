@@ -6,7 +6,7 @@
 #include "ResourceHolder.hpp"
 #include "World.hpp"
 
-class Game {
+class Game: private sf::NonCopyable {
 public: 
 	Game();
 	void run();
@@ -19,19 +19,12 @@ private:
 private:
 	sf::RenderWindow mWindow;
 	World mWorld;
-	bool mIsMovingUp, mIsMovingDown, mIsMovingLeft, mIsMovingRight;
 	static const float playerSpeed; 
-	static const sf::Time timePerFrame;
-
-	ResourceHolder<sf::Texture, Textures::ID> textures;
-	sf::Sprite landscape;
-	sf::Sprite airplane;
-
 	ResourceHolder<sf::Font, Fonts::ID> fonts;
-
 	sf::Text mStatisticsText;
 	sf::Time mStatisticsUpdateTime;
 	std::size_t mStatisticsNumFrames;
+	static const sf::Time timePerFrame;
 };
 
 #endif

@@ -6,19 +6,10 @@ const float Game::playerSpeed = 100.f;
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
-	: mWindow(sf::VideoMode(640, 480), "SFML Application"),
+	: mWindow(sf::VideoMode(640, 480), "World", sf::Style::Close),
 	mWorld(mWindow),
-	mIsMovingDown(false),
-	mIsMovingLeft(false),
-	mIsMovingUp(false),
-	mIsMovingRight(false),
 	mStatisticsNumFrames(0)
 {
-	textures.load(Textures::Desert, "Media/Textures/Desert.png");
-	textures.load(Textures::Raptor, "Media/Textures/Eagle.png");
-	landscape.setTexture(textures.get(Textures::Desert));
-	airplane.setTexture(textures.get(Textures::Raptor));
-	airplane.setPosition(100.f, 100.f);
 	fonts.load(Fonts::Sansation, "Media/Sansation.ttf");
 	mStatisticsText.setFont(fonts.get(Fonts::Sansation));
 	mStatisticsText.setPosition(5.f, 5.f);
@@ -40,7 +31,6 @@ void Game::run() {
 		render();
 	}
 }
-
 void Game::processEvents() {
 	sf::Event event;
 	while (mWindow.pollEvent(event)) {
@@ -59,31 +49,10 @@ void Game::processEvents() {
 }
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
-	if (key == sf::Keyboard::W) {
-		mIsMovingUp = isPressed;
-	}
-	else if (key == sf::Keyboard::S) {
-		mIsMovingDown = isPressed;
-	}
-	else if (key == sf::Keyboard::A) {
-		mIsMovingLeft = isPressed;
-	}
-	else if (key == sf::Keyboard::D) {
-		mIsMovingRight = isPressed;
-	}
 }
 
-void Game::update(sf::Time deltaTime) {
-	sf::Vector2f movement(0.f, 0.f);
-	if (mIsMovingUp)
-		movement.y -= playerSpeed;
-	if (mIsMovingDown)
-		movement.y += playerSpeed;
-	if (mIsMovingLeft)
-		movement.x -= playerSpeed;
-	if (mIsMovingRight)
-		movement.x += playerSpeed;
-	airplane.move(movement * deltaTime.asSeconds());
+void Game::update(sf::Time elapsedTime) {
+	mWorld.update(elapsedTime);
 }
 
 void Game::updateStatistics(sf::Time elapsedTime) {
@@ -100,9 +69,8 @@ void Game::updateStatistics(sf::Time elapsedTime) {
 
 void Game::render() {
 	mWindow.clear();
-	mWindow.draw(landscape);
-	mWindow.draw(airplane);
-
+	mWorld.draw();
+	mWindow.setView(mWindow.getDefaultView());
 	mWindow.draw(mStatisticsText);
 	mWindow.display();
 }
