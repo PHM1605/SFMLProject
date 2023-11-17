@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
+#include "Category.hpp"
+#include "Command.hpp"
 
 class SceneNode: public sf::Drawable, public sf::Transformable, sf::NonCopyable {
 public:
@@ -13,6 +15,8 @@ public:
 	void update(sf::Time dt);
 	sf::Vector2f getWorldPosition() const;
 	sf::Transform getWorldTransform() const;
+	virtual unsigned int getCategory() const;
+	void onCommand(const Command& command, sf::Time dt);
 private:
 	std::vector<Ptr> mChildren;
 	SceneNode* mParent;

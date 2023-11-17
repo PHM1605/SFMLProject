@@ -5,12 +5,15 @@
 #include "Aircraft.hpp"
 #include <array>
 #include "SpriteNode.hpp"
+#include "CommandQueue.hpp"
+#include "Player.hpp"
 
 class World : private sf::NonCopyable {
 public:
 	explicit World(sf::RenderWindow& window);
 	void update(sf::Time dt);
 	void draw();
+	CommandQueue& getCommandQueue();
 private:
 	enum Layer { Background, Air, LayerCount };
 	sf::RenderWindow& mWindow;
@@ -22,7 +25,8 @@ private:
 	sf::Vector2f mSpawnPosition;
 	float mScrollSpeed;
 	Aircraft* mPlayerAircraft;
-
+	CommandQueue mCommandQueue;
+	
 private:
 	void loadTextures();
 	void buildScene();

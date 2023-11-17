@@ -57,11 +57,32 @@ void World::draw() {
 
 void World::update(sf::Time dt) {
 	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
-	sf::Vector2f position = mPlayerAircraft->getPosition();
+	mPlayerAircraft->setVelocity(0.f, 0.f);
+	while (!mCommandQueue.isEmpty())
+		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
+	mSceneGraph.update(dt);
+
+	/*float mPlayerSpeed = 2.f * (-mScrollSpeed);
+	sf::Vector2f movement(0.0f, 0.f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		movement.y -= mPlayerSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		movement.y += mPlayerSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		movement.x -= mPlayerSpeed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		movement.x += mPlayerSpeed;
+	mPlayerAircraft->move(movement * dt.asSeconds());*/
+
+	/*sf::Vector2f position = mPlayerAircraft->getPosition();
 	sf::Vector2f velocity = mPlayerAircraft->getVelocity();
 	if (position.x <= mWorldBounds.left + 150 || position.x >= mWorldBounds.left + mWorldBounds.width - 150) {
 		velocity.x = -velocity.x;
 		mPlayerAircraft->setVelocity(velocity);
 	}
-	mSceneGraph.update(dt);
+	mSceneGraph.update(dt);*/
+}
+
+CommandQueue& World::getCommandQueue() {
+	return mCommandQueue;
 }

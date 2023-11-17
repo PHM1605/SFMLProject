@@ -8,7 +8,8 @@ const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 Game::Game()
 	: mWindow(sf::VideoMode(640, 480), "World", sf::Style::Close),
 	mWorld(mWindow),
-	mStatisticsNumFrames(0)
+	mStatisticsNumFrames(0),
+	mIsPaused(false)
 {
 	fonts.load(Fonts::Sansation, "Media/Sansation.ttf");
 	mStatisticsText.setFont(fonts.get(Fonts::Sansation));
@@ -24,32 +25,32 @@ void Game::run() {
 		timeSinceLastUpdate += elapsedTime;
 		while (timeSinceLastUpdate > timePerFrame) {
 			timeSinceLastUpdate -= timePerFrame;
-			processEvents();
-			update(timePerFrame);
+			processInput();
+			if (!mIsPaused)
+				update(timePerFrame);
 		}
 		updateStatistics(elapsedTime);
 		render();
 	}
 }
-void Game::processEvents() {
+void Game::processInput() {
+	CommandQueue& commands = mWorld.getCommandQueue();
 	sf::Event event;
 	while (mWindow.pollEvent(event)) {
-		switch (event.type) {
-		case sf::Event::KeyPressed:
-			handlePlayerInput(event.key.code, true);
-			break;
-		case sf::Event::KeyReleased:
-			handlePlayerInput(event.key.code, false);
-			break;
-		case sf::Event::Closed:
+		// When user clicks out of the window -> stop updating
+		if (event.type == sf::Event::GainedFocus)
+			mIsPaused = false;
+		else if (event.type == sf::Event::LostFocus)
+			mIsPaused = true;
+
+		mPlayer.handleEvent(event, commands);
+		if (event.type == sf::Event::Closed)
 			mWindow.close();
-			break;
-		}
 	}
+	mPlayer.handleRealtimeInput(commands);
 }
 
-void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed) {
-}
+
 
 void Game::update(sf::Time elapsedTime) {
 	mWorld.update(elapsedTime);
