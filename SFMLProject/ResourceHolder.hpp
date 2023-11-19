@@ -55,5 +55,6 @@ public:
 };
 
 typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
+typedef ResourceHolder<sf::Font, Fonts::ID> FontsHolder;
 
 #endif

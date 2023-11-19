@@ -30,4 +30,6 @@ private:
 private:
 	void loadTextures();
 	void buildScene();
+	void adaptPlayerVelocity();
+	void adaptPlayerPosition(); // when player moves out of screen
 };
