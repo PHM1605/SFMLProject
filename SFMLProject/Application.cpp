@@ -23,6 +23,13 @@ Application::Application()
 	mStateStack.pushState(States::Title);
 }
 
+void Application::registerStates() {
+	mStateStack.registerState<TitleState>(States::Title);
+	mStateStack.registerState<MenuState>(States::Menu);
+	mStateStack.registerState<GameState>(States::Game);
+	mStateStack.registerState<PauseState>(States::Pause);
+}
+
 void Application::run() {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
