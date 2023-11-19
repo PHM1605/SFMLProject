@@ -1,23 +1,29 @@
-#include "game.hpp"
+#include "Application.hpp"
 #include "StringHelpers.hpp"
 #include <iostream>
 
-const float Game::playerSpeed = 100.f;
-const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
+const sf::Time Application::timePerFrame = sf::seconds(1.f / 60.f);
 
-Game::Game()
-	: mWindow(sf::VideoMode(640, 480), "World", sf::Style::Close),
-	mWorld(mWindow),
-	mStatisticsNumFrames(0),
-	mIsPaused(false)
+Application::Application()
+	: mWindow(sf::VideoMode(640, 480), "States", sf::Style::Close),
+	mTextures(),
+	mFonts(),
+	mPlayer(),
+	mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer)),
+	mStatisticsText(),
+	mStatisticsUpdateTime(),
+	mStatisticsNumFrames(0)
 {
-	fonts.load(Fonts::Sansation, "Media/Sansation.ttf");
-	mStatisticsText.setFont(fonts.get(Fonts::Sansation));
+	mWindow.setKeyRepeatEnabled(false);
+	mFonts.load(Fonts::Main, "Media/Sansation.ttf");
+	mStatisticsText.setFont(mFonts.get(Fonts::Main));
 	mStatisticsText.setPosition(5.f, 5.f);
-	mStatisticsText.setCharacterSize(10);
+	mStatisticsText.setCharacterSize(10u);
+	registerStates();
+	mStateStack.pushState(States::Title);
 }
 
-void Game::run() {
+void Application::run() {
 	sf::Clock clock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 	while (mWindow.isOpen()) {
@@ -26,34 +32,23 @@ void Game::run() {
 		while (timeSinceLastUpdate > timePerFrame) {
 			timeSinceLastUpdate -= timePerFrame;
 			processInput();
-			if (!mIsPaused)
-				update(timePerFrame);
+			update(timePerFrame);
 		}
 		updateStatistics(elapsedTime);
 		render();
 	}
 }
-void Game::processInput() {
-	CommandQueue& commands = mWorld.getCommandQueue();
+void Application::processInput() {
 	sf::Event event;
 	while (mWindow.pollEvent(event)) {
-		// When user clicks out of the window -> stop updating
-		if (event.type == sf::Event::GainedFocus)
-			mIsPaused = false;
-		else if (event.type == sf::Event::LostFocus)
-			mIsPaused = true;
-
-		mPlayer.handleEvent(event, commands);
+		mStateStack.handleEvent(event);
 		if (event.type == sf::Event::Closed)
 			mWindow.close();
 	}
-	mPlayer.handleRealtimeInput(commands);
 }
 
-
-
-void Game::update(sf::Time elapsedTime) {
-	mWorld.update(elapsedTime);
+void Application::update(sf::Time elapsedTime) {
+	mStateStack.update(elapsedTime);
 }
 
 void Game::updateStatistics(sf::Time elapsedTime) {

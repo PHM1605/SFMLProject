@@ -146,6 +146,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SpriteNode.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,9 +157,13 @@
     <ClInclude Include="CommandQueue.hpp" />
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="game.hpp" />
+    <ClInclude Include="GameState.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="SceneNode.hpp" />
     <ClInclude Include="SpriteNode.hpp" />
+    <ClInclude Include="State.hpp" />
+    <ClInclude Include="StateIdentifiers.hpp" />
+    <ClInclude Include="StateStack.hpp" />
     <ClInclude Include="StringHelpers.hpp" />
     <ClInclude Include="ResourceHolder.hpp" />
     <ClInclude Include="World.hpp" />

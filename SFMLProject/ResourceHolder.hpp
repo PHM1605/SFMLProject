@@ -6,13 +6,7 @@
 #include <cassert>
 #include <SFML/Graphics.hpp>
 
-namespace Textures {
-	enum ID { Eagle, Raptor, Desert };
-}
 
-namespace Fonts {
-	enum ID { Sansation };
-}
 
 template <typename Resource, typename Identifier>
 class ResourceHolder {
@@ -54,7 +48,5 @@ public:
 	}
 };
 
-typedef ResourceHolder<sf::Texture, Textures::ID> TextureHolder;
-typedef ResourceHolder<sf::Font, Fonts::ID> FontsHolder;
 
 #endif

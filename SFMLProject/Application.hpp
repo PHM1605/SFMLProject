@@ -3,29 +3,28 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "ResourceIdentifiers.hpp"
 #include "ResourceHolder.hpp"
-#include "World.hpp"
+#include "StateStack.hpp"
 
-class Game: private sf::NonCopyable {
+class Application {
 public: 
-	Game();
+	Application();
 	void run();
 private:
 	void processInput();
-	void update(sf::Time elapsedTime);
+	void update(sf::Time dt);
 	void render();
-	void updateStatistics(sf::Time elapsedTime);
+	void updateStatistics(sf::Time dt);
+	void registerStates();
 private:
+	static const sf::Time timePerFrame;
 	sf::RenderWindow mWindow;
-	World mWorld;
+	TextureHolder mTextures;
+	FontsHolder mFonts;
 	Player mPlayer;
-	static const float playerSpeed; 
-	ResourceHolder<sf::Font, Fonts::ID> fonts;
+	StateStack mStateStack;
 	sf::Text mStatisticsText;
 	sf::Time mStatisticsUpdateTime;
 	std::size_t mStatisticsNumFrames;
-	static const sf::Time timePerFrame;
-	bool mIsPaused;
 };
-
-#endif

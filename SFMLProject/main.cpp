@@ -1,11 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "game.hpp"
+#include "Application.hpp"
 
 int main() {
 	try {
-		Game game;
-		game.run();
+		Application app;
+		app.run();
 	}
 	catch (std::runtime_error& e) {
 		std::cout << "Exception: " << e.what() << std::endl;
