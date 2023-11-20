@@ -1,12 +1,9 @@
-#ifndef TEXTUREHOLDER_HPP
-#define TEXTUREHOLDER_HPP
-
+#pragma once
 #include <map>
 #include <memory>
 #include <cassert>
 #include <SFML/Graphics.hpp>
-
-
+#include <iostream>
 
 template <typename Resource, typename Identifier>
 class ResourceHolder {
@@ -47,6 +44,3 @@ public:
 		return *found->second;
 	}
 };
-
-
-#endif

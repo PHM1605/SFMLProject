@@ -3,15 +3,41 @@
 World::World(sf::RenderWindow& window) :
 	mWindow(window),
 	mWorldView(window.getDefaultView()),
-	mScrollSpeed(-50.f),
+	mTextures(),
+	mSceneGraph(),
+	mSceneLayers(),
 	mWorldBounds(0.f, 0.f, mWorldView.getSize().x, 2000.f),
 	mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y/2.f),
+	mScrollSpeed(-50.f),
 	mPlayerAircraft(nullptr)
 {
 	loadTextures();
 	buildScene();
 	mWorldView.setCenter(mSpawnPosition);
 }
+
+void World::update(sf::Time dt) {
+	sf::Vector2f topLeft = mWorldView.getCenter() - mWorldView.getSize() / 2.f;
+	if (topLeft.y <= 0)
+		mScrollSpeed = 0;
+	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
+	mPlayerAircraft->setVelocity(0.f, 0.f);
+	while (!mCommandQueue.isEmpty())
+		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
+	adaptPlayerVelocity();
+	mSceneGraph.update(dt);
+	adaptPlayerPosition();
+}
+
+void World::draw() {
+	mWindow.setView(mWorldView);
+	mWindow.draw(mSceneGraph);
+}
+
+CommandQueue& World::getCommandQueue() {
+	return mCommandQueue;
+}
+
 
 void World::loadTextures() {
 	mTextures.load(Textures::Eagle, "Media/Textures/Eagle.png");
@@ -48,28 +74,6 @@ void World::buildScene() {
 	std::unique_ptr<Aircraft>rightEscort(new Aircraft(Aircraft::Raptor, mTextures));
 	rightEscort->setPosition(80.f, 50.f);
 	mPlayerAircraft->attachChild(std::move(rightEscort));
-}
-
-void World::draw() {
-	mWindow.setView(mWorldView);
-	mWindow.draw(mSceneGraph);
-}
-
-void World::update(sf::Time dt) {
-	sf::Vector2f topLeft = mWorldView.getCenter() - mWorldView.getSize() / 2.f;
-	if (topLeft.y <= 0)
-		mScrollSpeed = 0;
-	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
-	mPlayerAircraft->setVelocity(0.f, 0.f);
-	while (!mCommandQueue.isEmpty())
-		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
-	adaptPlayerVelocity();
-	mSceneGraph.update(dt);
-	adaptPlayerPosition();
-}
-
-CommandQueue& World::getCommandQueue() {
-	return mCommandQueue;
 }
 
 void World::adaptPlayerVelocity() {

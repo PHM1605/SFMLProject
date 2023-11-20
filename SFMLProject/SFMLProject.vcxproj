@@ -142,12 +142,17 @@
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SpriteNode.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateStack.cpp" />
+    <ClCompile Include="TitleState.cpp" />
+    <ClCompile Include="Utility.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +163,8 @@
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="GameState.hpp" />
+    <ClInclude Include="MenuState.hpp" />
+    <ClInclude Include="PauseState.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="ResourceIdentifiers.hpp" />
     <ClInclude Include="SceneNode.hpp" />
@@ -165,13 +172,13 @@
     <ClInclude Include="State.hpp" />
     <ClInclude Include="StateIdentifiers.hpp" />
     <ClInclude Include="StateStack.hpp" />
-    <ClInclude Include="StringHelpers.hpp" />
+    <ClInclude Include="Utility.hpp" />
     <ClInclude Include="ResourceHolder.hpp" />
+    <ClInclude Include="TitleState.hpp" />
     <ClInclude Include="World.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
-    <None Include="StringHelpers.inl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Media\Sansation.ttf" />
@@ -180,6 +187,7 @@
     <Image Include="Media\Textures\Desert.png" />
     <Image Include="Media\Textures\Eagle.png" />
     <Image Include="Media\Textures\Raptor.png" />
+    <Image Include="Media\Textures\TitleScreen.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

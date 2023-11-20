@@ -1,6 +1,10 @@
 #include "Application.hpp"
-#include "StringHelpers.hpp"
 #include <iostream>
+#include "GameState.hpp"
+#include "TitleState.hpp"
+#include "MenuState.hpp"
+#include "Utility.hpp"
+#include "PauseState.hpp"
 
 const sf::Time Application::timePerFrame = sf::seconds(1.f / 60.f);
 
@@ -16,6 +20,7 @@ Application::Application()
 {
 	mWindow.setKeyRepeatEnabled(false);
 	mFonts.load(Fonts::Main, "Media/Sansation.ttf");
+	mTextures.load(Textures::TitleScreen, "Media/Textures/TitleScreen.png");
 	mStatisticsText.setFont(mFonts.get(Fonts::Main));
 	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(10u);
@@ -40,6 +45,8 @@ void Application::run() {
 			timeSinceLastUpdate -= timePerFrame;
 			processInput();
 			update(timePerFrame);
+			if (mStateStack.isEmpty())
+				mWindow.close();
 		}
 		updateStatistics(elapsedTime);
 		render();
@@ -58,22 +65,21 @@ void Application::update(sf::Time elapsedTime) {
 	mStateStack.update(elapsedTime);
 }
 
-void Game::updateStatistics(sf::Time elapsedTime) {
+void Application::updateStatistics(sf::Time elapsedTime) {
 	mStatisticsUpdateTime += elapsedTime;
 	mStatisticsNumFrames += 1;
 	if (mStatisticsUpdateTime >= sf::seconds(1.0f)) {
-		mStatisticsText.setString(
-			"Frames/Second = " + toString(mStatisticsNumFrames) + "\n" +
-			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us");
+		mStatisticsText.setString("FPS = " + toString(mStatisticsNumFrames));
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
 	}
 }
 
-void Game::render() {
+void Application::render() {
 	mWindow.clear();
-	mWorld.draw();
+	mStateStack.draw();
 	mWindow.setView(mWindow.getDefaultView());
 	mWindow.draw(mStatisticsText);
 	mWindow.display();
 }
+

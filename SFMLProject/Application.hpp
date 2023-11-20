@@ -1,6 +1,3 @@
-#ifndef GAME_HPP
-#define GAME_HPP
-
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "ResourceIdentifiers.hpp"
@@ -21,7 +18,7 @@ private:
 	static const sf::Time timePerFrame;
 	sf::RenderWindow mWindow;
 	TextureHolder mTextures;
-	FontsHolder mFonts;
+	FontHolder mFonts;
 	Player mPlayer;
 	StateStack mStateStack;
 	sf::Text mStatisticsText;

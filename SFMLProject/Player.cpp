@@ -48,15 +48,11 @@ void Player::handleRealtimeInput(CommandQueue& commands) {
 	}
 }
 
-// print aircraft position when press P
 void Player::handleEvent(const sf::Event& event, CommandQueue& commands) {
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P) {
-		Command output;
-		output.category = Category::PlayerAircraft;
-		output.action = [](SceneNode& s, sf::Time) {
-			std::cout << s.getPosition().x << "," << s.getPosition().y << "\n";
-		};
-		commands.push(output);
+	if (event.type == sf::Event::KeyPressed) {
+		auto found = mKeyBinding.find(event.key.code);
+		if (found != mKeyBinding.end() && !isRealtimeAction(found->second))
+			commands.push(mActionBinding[found->second]);
 	}
 }
 

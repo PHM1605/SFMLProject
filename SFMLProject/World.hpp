@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "ResourceHolder.hpp"
+#include "ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
 #include "Aircraft.hpp"
 #include <array>
