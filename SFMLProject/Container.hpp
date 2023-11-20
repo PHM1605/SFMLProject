@@ -8,6 +8,8 @@ namespace GUI {
 	public:
 		Container();
 		void pack(Component::Ptr component);
+		virtual bool isSelectable() const;
+		virtual void handleEvent(const sf::Event& event);
 	private:
 		std::vector<Component::Ptr> mChildren;
 		int mSelectedChild;

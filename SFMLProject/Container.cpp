@@ -16,7 +16,23 @@ namespace GUI {
 		return mSelectedChild >= 0;
 	}
 
-	void Container::select(std::size_t index) {
+	bool Container::isSelectable() const {
+		return false;
+	}
 
+	void Container::handleEvent(const sf::Event& event) {
+		if (hasSelection() && mChildren[mSelectedChild]->isActive()) {
+			mChildren[mSelectedChild]->handleEvent(event);
+		}
+
+	}
+
+	void Container::select(std::size_t index) {
+		if (mChildren[index]->isSelectable()) {
+			if (hasSelection())
+				mChildren[mSelectedChild]->deselect();
+			mChildren[index]->select();
+			mSelectedChild = index;
+		}
 	}
 }

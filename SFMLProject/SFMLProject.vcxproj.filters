@@ -152,6 +152,9 @@
     <ClInclude Include="Container.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Button.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />

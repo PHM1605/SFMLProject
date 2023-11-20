@@ -2,12 +2,12 @@
 
 MenuState::MenuState(StateStack& stack, Context context) :
 	State(stack, context),
-	mOptions(),
-	mOptionIndex(0) 
+	mGUIContainer()
 {
 	sf::Texture& texture = context.textures->get(Textures::TitleScreen);
-	sf::Font& font = context.fonts->get(Fonts::Main);
 	mBackgroundSprite.setTexture(texture);
+
+	auto playButton = std::make_shared<GUI::Button> 
 	sf::Text playOption;
 	playOption.setFont(font);
 	playOption.setString("Play");
@@ -27,8 +27,7 @@ void MenuState::draw() {
 	sf::RenderWindow& window = *getContext().window;
 	window.setView(window.getDefaultView());
 	window.draw(mBackgroundSprite);
-	for (const sf::Text& text : mOptions)
-		window.draw(text);
+	window.draw(mGUIContainer);
 }
 
 bool MenuState::update(sf::Time) {
@@ -36,6 +35,8 @@ bool MenuState::update(sf::Time) {
 }
 
 bool MenuState::handleEvent(const sf::Event& event) {
+	mGUIContainer.handleEvent(event);
+	return false;
 	if (event.type != sf::Event::KeyPressed)
 		return false;
 	if (event.key.code == sf::Keyboard::Return) {

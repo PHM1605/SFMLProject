@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aircraft.hpp" />
+    <ClInclude Include="Button.hpp" />
     <ClInclude Include="Category.hpp" />
     <ClInclude Include="Command.hpp" />
     <ClInclude Include="CommandQueue.hpp" />
