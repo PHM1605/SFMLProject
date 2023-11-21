@@ -14,7 +14,10 @@ namespace GUI {
 		std::vector<Component::Ptr> mChildren;
 		int mSelectedChild;
 	private:
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 		bool hasSelection() const; // Container has child(ren) Components(s) or not
 		void select(std::size_t index);
+		void selectNext();
+		void selectPrevious();
 	};
 }

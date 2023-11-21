@@ -40,6 +40,7 @@ bool LoadingState::update(sf::Time) {
 	else {
 		setCompletion(mLoadingTask.getCompletion());
 	}
+	return true;
 }
 
 bool LoadingState::handleEvent(const sf::Event& event) {

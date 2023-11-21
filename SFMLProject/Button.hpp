@@ -1,12 +1,14 @@
 #pragma once
 #include "Component.hpp"
 #include "ResourceIdentifiers.hpp"
+#include "Utility.hpp"
+#include <functional>
 
 namespace GUI {
 	class Button : public Component {
 	public:
 		typedef std::shared_ptr<Button> Ptr;
-		typedef std::is_function<void()> Callback;
+		typedef std::function<void()> Callback;
 	public:
 		Button(const FontHolder& fonts, const TextureHolder& textures);
 		void setCallback(Callback callback);
@@ -19,7 +21,7 @@ namespace GUI {
 		virtual void activate();
 		virtual void deactivate();
 		
-		virtual void handleEvnet(const sf::Event& event);
+		virtual void handleEvent(const sf::Event& event);
 
 	private:
 		Callback mCallback;

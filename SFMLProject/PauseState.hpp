@@ -1,6 +1,8 @@
 #pragma once
 #include "State.hpp"
 #include "Utility.hpp"
+#include "Container.hpp"
+#include "Button.hpp"
 
 class PauseState : public State {
 public:
@@ -11,5 +13,5 @@ public:
 private:
 	sf::Sprite mBackgroundSprite;
 	sf::Text mPausedText;
-	sf::Text mInstructionText;
+	GUI::Container mGUIContainer;
 };
