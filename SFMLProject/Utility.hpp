@@ -1,5 +1,7 @@
 #pragma once
 #include<sstream>
+#include <cassert>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 
 // std::to_string does not work on MinGW
@@ -15,3 +17,5 @@ void centerOrigin(sf::Text& text);
 
 float toDegree(float radian);
 float toRadian(float degree);
+
+sf::Vector2f unitVector(sf::Vector2f vector);

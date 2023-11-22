@@ -24,7 +24,6 @@ void World::update(sf::Time dt) {
 		mScrollSpeed = 0;
 	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
 	mPlayerAircraft->setVelocity(0.f, 0.f);
-	std::cout << !bool(mCommandQueue.isEmpty());
 	while (!mCommandQueue.isEmpty())
 		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
 	adaptPlayerVelocity();
@@ -48,6 +47,7 @@ void World::loadTextures() {
 	mTextures.load(Textures::Raptor, "Media/Textures/Raptor.png");
 	mTextures.load(Textures::Avenger, "Media/Textures/Avenger.png");
 	mTextures.load(Textures::Desert, "Media/Textures/Desert.png");
+	mTextures.load(Textures::Missile, "Media/Textures/Missile.png");
 }
 
 void World::buildScene() {

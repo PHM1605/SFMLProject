@@ -26,3 +26,21 @@ std::vector<AircraftData> initializeAircraftData() {
 
 	return data;
 }
+
+std::vector<ProjectileData> initializeProjectileData() {
+	std::vector<ProjectileData> data(Projectile::TypeCount);
+
+	data[Projectile::AlliedBullet].damage = 10;
+	data[Projectile::AlliedBullet].speed = 300.f;
+	data[Projectile::AlliedBullet].texture = Textures::Bullet;
+
+	data[Projectile::EnemyBullet].damage = 10;
+	data[Projectile::EnemyBullet].speed = 300.f;
+	data[Projectile::EnemyBullet].texture = Textures::Bullet;
+
+	data[Projectile::Missile].damage = 200;
+	data[Projectile::Missile].speed = 150.f;
+	data[Projectile::Missile].texture = Textures::Missile;
+	
+	return data;
+}

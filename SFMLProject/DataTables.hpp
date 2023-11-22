@@ -1,6 +1,7 @@
 #pragma once
 #include "ResourceIdentifiers.hpp"
 #include "Aircraft.hpp"
+#include "Projectile.hpp"
 
 struct Direction {
 	Direction(float angle, float distance):
@@ -19,4 +20,11 @@ struct AircraftData {
 	std::vector<Direction> directions;
 };
 
+struct ProjectileData {
+	int damage;
+	float speed;
+	Textures::ID texture;
+};
+
 std::vector<AircraftData> initializeAircraftData();
+std::vector<ProjectileData> initializeProjectileData();
