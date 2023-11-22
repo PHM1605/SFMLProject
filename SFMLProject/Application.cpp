@@ -1,5 +1,4 @@
 #include "Application.hpp"
-#include <iostream>
 #include "GameState.hpp"
 #include "TitleState.hpp"
 #include "MenuState.hpp"

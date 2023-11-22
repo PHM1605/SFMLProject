@@ -9,12 +9,15 @@ namespace GUI
 	public:
 		Component();
 		virtual ~Component();
+		// Buttons are selectable; Labels are not
 		virtual bool isSelectable() const = 0;
 
+		// Select is for all Buttons
 		bool isSelected() const;
 		virtual void select();
 		virtual void deselect();
 
+		// Active/Activate is for Toggle Buttons (in Settings state)
 		bool isActive() const;
 		virtual void activate();
 		virtual void deactivate();

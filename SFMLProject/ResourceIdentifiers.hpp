@@ -3,7 +3,7 @@
 #include "ResourceHolder.hpp"
 
 namespace Textures {
-	enum ID { Eagle, Raptor, Desert, TitleScreen, ButtonNormal, ButtonSelected, ButtonPressed};
+	enum ID { Eagle, Raptor, Avenger, Bullet, Missile, Desert, HealthRefill, MissleRefill, FireSpread, FireRate, TitleScreen, ButtonNormal, ButtonSelected, ButtonPressed};
 }
 
 namespace Fonts {

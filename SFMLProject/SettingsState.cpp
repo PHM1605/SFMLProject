@@ -12,10 +12,53 @@ SettingsState::SettingsState(StateStack& stack, Context context) :
 	addButtonLabel(Player::MoveDown, 300.f, "Move Down", context);
 
 	updateLabels();
+
+	auto backButton = std::make_shared<GUI::Button>(*context.fonts, *context.textures);
+	backButton->setPosition(80.f, 375.f);
+	backButton->setText("Back");
+	//backButton->setCallback(std::bind(&SettingsState::requestStackPop, this));
+	backButton->setCallback([this]() {
+		requestStackPop();
+		});
+	mGUIContainer.pack(backButton);
+}
+
+void SettingsState::draw() {
+	sf::RenderWindow& window = *getContext().window;
+	window.draw(mBackgroundSprite);
+	window.draw(mGUIContainer);
+}
+
+bool SettingsState::update(sf::Time) {
+	return true;
+}
+
+bool SettingsState::handleEvent(const sf::Event& event) {
+	bool isKeyBinding = false; // user is trying to setup a new key or not
+	for (std::size_t action = 0; action < Player::ActionCount; ++action) {
+		if (mBindingButtons[action]->isActive()) {
+			isKeyBinding = true;
+			if (event.type == sf::Event::KeyReleased) {
+				getContext().player->assignKey(static_cast<Player::Action>(action), event.key.code);
+				mBindingButtons[action]->deactivate();
+			}
+			break;
+		}
+	}
+	if (isKeyBinding)
+		updateLabels();
+	else
+		mGUIContainer.handleEvent(event);
+	return false;
 }
 
 void SettingsState::updateLabels() {
-
+	Player& player = *getContext().player;
+	for (std::size_t i = 0; i < Player::ActionCount; ++i) {
+		sf::Keyboard::Key key = player.getAssignedKey(static_cast<Player::Action>(i));
+		std::string tmp = sf::Keyboard::getDescription(sf::Keyboard::delocalize(key));
+		mBindingLabels[i]->setText(tmp);
+	}
 }
 
 void SettingsState::addButtonLabel(Player::Action action, float y, const std::string& text, Context context) {
@@ -30,3 +73,4 @@ void SettingsState::addButtonLabel(Player::Action action, float y, const std::st
 	mGUIContainer.pack(mBindingButtons[action]);
 	mGUIContainer.pack(mBindingLabels[action]);
 }
+

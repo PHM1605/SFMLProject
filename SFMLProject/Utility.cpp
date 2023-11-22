@@ -12,3 +12,11 @@ void centerOrigin(sf::Text& text) {
 	sf::FloatRect bounds = text.getLocalBounds();
 	text.setOrigin(std::floor(bounds.left + bounds.width / 2.f), std::floor(bounds.top + bounds.height / 2.f));
 }
+
+float toDegree(float radian) {
+	return 180.f / 3.141593f * radian;
+}
+
+float toRadian(float degree) {
+	return 3.141593f / 180.f * degree;
+}

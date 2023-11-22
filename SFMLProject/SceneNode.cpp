@@ -20,16 +20,16 @@ SceneNode::Ptr SceneNode::detachChild(const SceneNode& node) {
 	return result;
 }
 
-void SceneNode::update(sf::Time dt) {
-	updateCurrent(dt);
-	updateChildren(dt);
+void SceneNode::update(sf::Time dt, CommandQueue& commands) {
+	updateCurrent(dt, commands);
+	updateChildren(dt, commands);
 }
 
-void SceneNode::updateCurrent(sf::Time) {} // to be overwritten
+void SceneNode::updateCurrent(sf::Time, CommandQueue& commands) {} // to be overwritten
 
-void SceneNode::updateChildren(sf::Time dt) {
+void SceneNode::updateChildren(sf::Time dt, CommandQueue& commands) {
 	for (Ptr& child : mChildren) {
-		child->update(dt);
+		child->update(dt, commands);
 	}
 }
 
