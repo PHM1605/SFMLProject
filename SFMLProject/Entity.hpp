@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include "SceneNode.hpp"
 #include <cassert>

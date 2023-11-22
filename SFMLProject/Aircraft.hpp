@@ -14,6 +14,8 @@ public:
 	virtual unsigned int getCategory() const;
 	//virtual sf::FloatRect getBoundingRect() const;
 	float getMaxSpeed() const;
+	void fire();
+	void launchMissile();
 private:
 	Type mType;
 	sf::Sprite mSprite;
