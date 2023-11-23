@@ -1,4 +1,5 @@
 #include "SceneNode.hpp"
+#include <iostream>
 
 SceneNode::SceneNode(Category::Type category):
 	mChildren(), 

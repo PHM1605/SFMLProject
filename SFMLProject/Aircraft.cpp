@@ -1,4 +1,5 @@
 #include "Aircraft.hpp"
+#include <iostream>
 
 namespace {
 	const std::vector<AircraftData> Table = initializeAircraftData();
@@ -14,7 +15,7 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	mIsFiring(false),
 	mIsLaunchingMissile(false),
 	mIsMarkedForRemoval(false),
-	mFireRateLevel(1),
+	mFireRateLevel(0),
 	mSpreadLevel(1),
 	mMissileAmmo(2),
 	mDropPickupCommand(),
@@ -25,12 +26,12 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 {	
 	centerOrigin(mSprite);
 
-	mFireCommand.category = Category::SceneAirLayer;
+	mFireCommand.category = Category::PlayerAircraft | Category::EnemyAircraft;
 	mFireCommand.action = [this, &textures](SceneNode& node, sf::Time) {
 		createBullets(node, textures);
 	};
 
-	mMissileCommand.category = Category::SceneAirLayer;
+	mMissileCommand.category = Category::PlayerAircraft;
 	mMissileCommand.action = [this, &textures](SceneNode& node, sf::Time) {
 		createProjectile(node, Projectile::Missile, 0.f, 0.5f, textures);
 	};
@@ -38,7 +39,6 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	std::unique_ptr<TextNode> healthDisplay(new TextNode(fonts, ""));
 	mHealthDisplay = healthDisplay.get();
 	attachChild(std::move(healthDisplay));
-
 	if (getCategory() == Category::PlayerAircraft) {
 		std::unique_ptr<TextNode> missileDisplay(new TextNode(fonts, ""));
 		missileDisplay->setPosition(0, 70);
@@ -104,8 +104,6 @@ void Aircraft::collectMissiles(unsigned int count) {
 }
 
 void Aircraft::fire() {
-	std::cout << "here" << std::endl;
-
 	if (Table[mType].fireInterval != sf::Time::Zero)
 		mIsFiring = true;
 }
@@ -134,17 +132,18 @@ void Aircraft::updateMovementPattern(sf::Time dt) {
 }
 
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
-	if (!isAllied())
-		fire(); // Enemy always fires
-	if (mIsFiring && mFireCountdown <= sf::Time::Zero) {
-		std::cout << "here1" << std::endl;
-
+	if (!isAllied()) {
 		commands.push(mFireCommand);
-		mFireCountdown += sf::seconds(1.f / (mFireRateLevel + 1.f));
+		return;
+	}
+	if (mIsFiring && mFireCountdown <= sf::Time::Zero) {
+		commands.push(mFireCommand);
+		mFireCountdown += Table[mType].fireInterval / (mFireRateLevel + 1.f);
 		mIsFiring = false;
 	}
 	else if (mFireCountdown > sf::Time::Zero) {
 		mFireCountdown -= dt;
+		mIsFiring = false;
 	}
 	if (mIsLaunchingMissile) {
 		commands.push(mMissileCommand);
@@ -152,7 +151,6 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
 	}
 }
 
-// Bullets are attached to SceneNode i.e. main SceneGraph
 void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const {
 	Projectile::Type type = isAllied() ? Projectile::AlliedBullet : Projectile::EnemyBullet;
 	switch (mSpreadLevel) {
@@ -176,7 +174,7 @@ void Aircraft::createProjectile(SceneNode& node, Projectile::Type type, float xO
 	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
 	sf::Vector2f velocity(0, projectile->getMaxSpeed());
 	float sign = isAllied() ? -1.f : 1.f;
-	projectile->setPosition(getWorldPosition() + offset * sign);
+	projectile->setPosition(offset * sign);
 	projectile->setVelocity(velocity * sign);
 	node.attachChild(std::move(projectile));
 }

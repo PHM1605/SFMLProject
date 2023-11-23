@@ -11,6 +11,6 @@ namespace Category {
 		EnemyProjectile = 1 << 6,
 
 		Aircraft = PlayerAircraft | AlliedAircraft | EnemyAircraft,
-		Projectile = AlliedAircraft | EnemyProjectile
+		Projectile = AlliedProjectile | EnemyProjectile
 	};
 }
