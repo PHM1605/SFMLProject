@@ -12,9 +12,9 @@ void GameState::draw() {
 }
 
 bool GameState::update(sf::Time dt) {
-	mWorld.update(dt);
 	CommandQueue& commands = mWorld.getCommandQueue();
 	mPlayer.handleRealtimeInput(commands);
+	mWorld.update(dt);
 	return true;
 }
 

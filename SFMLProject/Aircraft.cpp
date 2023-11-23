@@ -59,6 +59,7 @@ void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands) {
 		mIsMarkedForRemoval = true;
 		return;
 	}
+	//std::cout << mIsFiring << std::endl;
 	// Check if bullets or missiles are fired
 	checkProjectileLaunch(dt, commands);
 	updateMovementPattern(dt);
@@ -104,8 +105,8 @@ void Aircraft::collectMissiles(unsigned int count) {
 }
 
 void Aircraft::fire() {
-	if (Table[mType].fireInterval != sf::Time::Zero)
-		mIsFiring = true;
+	//if (Table[mType].fireInterval != sf::Time::Zero)
+	mIsFiring = true;
 }
 
 void Aircraft::launchMissile() {
@@ -132,10 +133,6 @@ void Aircraft::updateMovementPattern(sf::Time dt) {
 }
 
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
-	if (!isAllied()) {
-		commands.push(mFireCommand);
-		return;
-	}
 	if (mIsFiring && mFireCountdown <= sf::Time::Zero) {
 		commands.push(mFireCommand);
 		mFireCountdown += Table[mType].fireInterval / (mFireRateLevel + 1.f);
@@ -143,7 +140,6 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
 	}
 	else if (mFireCountdown > sf::Time::Zero) {
 		mFireCountdown -= dt;
-		mIsFiring = false;
 	}
 	if (mIsLaunchingMissile) {
 		commands.push(mMissileCommand);

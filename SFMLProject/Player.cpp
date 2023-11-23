@@ -25,7 +25,7 @@ Player::Player() {
 }
 
 void Player::handleEvent(const sf::Event& event, CommandQueue& commands) {
-	if (event.type == sf::Event::KeyPressed) {
+	if (event.type == sf::Event::KeyReleased) {
 		auto found = mKeyBinding.find(event.key.code);
 		if (found != mKeyBinding.end() && !isRealtimeAction(found->second))
 			commands.push(mActionBinding[found->second]);
@@ -75,7 +75,6 @@ bool Player::isRealtimeAction(Action action) {
 	case MoveRight:
 	case MoveDown:
 	case MoveUp:
-	case Fire:
 		return true;
 	default:
 		return false;
