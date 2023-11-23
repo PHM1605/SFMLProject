@@ -11,7 +11,8 @@ World::World(sf::RenderWindow& window, FontHolder& fonts):
 	mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y/2.f),
 	mScrollSpeed(-50.f),
 	mPlayerAircraft(nullptr),
-	mEnemySpawnPoints()
+	mEnemySpawnPoints(),
+	mActiveEnemies()
 {
 	loadTextures();
 	buildScene();
@@ -24,6 +25,8 @@ void World::update(sf::Time dt) {
 		mScrollSpeed = 0;
 	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
 	mPlayerAircraft->setVelocity(0.f, 0.f);
+	destroyEntitiesOutsideView();
+	guideMissiles();
 	while (!mCommandQueue.isEmpty())
 		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
 	adaptPlayerVelocity();
@@ -41,12 +44,20 @@ CommandQueue& World::getCommandQueue() {
 	return mCommandQueue;
 }
 
+bool World::hasAlivePlayer() const {
+	return !mPlayerAircraft->isMarkedForRemoval();
+}
+
+bool World::hasPlayerReachEnd() const {
+	return !mWorldBounds.contains(mPlayerAircraft->getPosition());
+}
 
 void World::loadTextures() {
 	mTextures.load(Textures::Eagle, "Media/Textures/Eagle.png");
 	mTextures.load(Textures::Raptor, "Media/Textures/Raptor.png");
 	mTextures.load(Textures::Avenger, "Media/Textures/Avenger.png");
 	mTextures.load(Textures::Desert, "Media/Textures/Desert.png");
+	mTextures.load(Textures::Bullet, "Media/Textures/Bullet.png");
 	mTextures.load(Textures::Missile, "Media/Textures/Missile.png");
 }
 
@@ -127,6 +138,50 @@ void World::spawnEnemies() {
 		mSceneLayers[Air]->attachChild(std::move(enemy));
 		mEnemySpawnPoints.pop_back();
 	}
+}
+
+void World::destroyEntitiesOutsideView() {
+	Command command;
+	command.category = Category::Projectile | Category::EnemyAircraft;
+	command.action = derivedAction<Entity>([this](Entity& e, sf::Time) {
+		if (!getBattlefieldBounds().intersects(e.getBoundingRect()))
+			e.destroy();
+		});
+	mCommandQueue.push(command);
+}
+
+void World::guideMissiles() {
+	// Collect an array to enemies
+	Command enemyCollector;
+	enemyCollector.category = Category::EnemyAircraft;
+	enemyCollector.action = derivedAction<Aircraft>([this](Aircraft& enemy, sf::Time) {
+		if (!enemy.isDestroyed())
+			mActiveEnemies.push_back(&enemy);
+		});
+
+	// Guild missiles
+	Command missileGuider;
+	missileGuider.category = Category::AlliedProjectile;
+	missileGuider.action = derivedAction<Projectile>([this](Projectile& missile, sf::Time) {
+		// Ignore unguided bullets
+		if (!missile.isGuided())
+			return;
+		float minDistance = std::numeric_limits<float>::max();
+		Aircraft* closestEnemy = nullptr;
+		// Find closes enemy
+		for (Aircraft* enemy : mActiveEnemies) {
+			float enemyDistance = distance(missile, *enemy);
+			if (enemyDistance < minDistance) {
+				closestEnemy = enemy;
+				minDistance = enemyDistance;
+			}
+		}
+		if (closestEnemy)
+			missile.guideTowards(closestEnemy->getWorldPosition());
+	});
+	mCommandQueue.push(enemyCollector);
+	mCommandQueue.push(missileGuider);
+	mActiveEnemies.clear();
 }
 
 sf::FloatRect World::getViewBounds() const {

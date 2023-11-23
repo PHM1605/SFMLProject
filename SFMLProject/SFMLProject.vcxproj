@@ -204,11 +204,13 @@
     <Font Include="Media\Sansation.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Media\Textures\Avenger.png" />
     <Image Include="Media\Textures\ButtonNormal.png" />
     <Image Include="Media\Textures\ButtonPressed.png" />
     <Image Include="Media\Textures\ButtonSelected.png" />
     <Image Include="Media\Textures\Desert.png" />
     <Image Include="Media\Textures\Eagle.png" />
+    <Image Include="Media\Textures\Missile.png" />
     <Image Include="Media\Textures\Raptor.png" />
     <Image Include="Media\Textures\TitleScreen.png" />
   </ItemGroup>

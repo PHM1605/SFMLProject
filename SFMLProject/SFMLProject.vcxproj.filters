@@ -87,6 +87,15 @@
     <ClCompile Include="Label.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DataTables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -170,6 +179,15 @@
     <ClInclude Include="Label.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DataTables.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextNode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
@@ -188,6 +206,21 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Media\Textures\TitleScreen.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\ButtonNormal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\ButtonPressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\ButtonSelected.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Avenger.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Missile.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

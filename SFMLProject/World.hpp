@@ -16,6 +16,8 @@ public:
 	void update(sf::Time dt);
 	void draw();
 	CommandQueue& getCommandQueue();
+	bool hasAlivePlayer() const;
+	bool hasPlayerReachEnd() const;
 
 private:
 	enum Layer { Background, Air, LayerCount };
@@ -42,13 +44,15 @@ private:
 	
 private:
 	void loadTextures();
-	void adaptPlayerVelocity();
 	void adaptPlayerPosition(); // when player moves out of screen
+	void adaptPlayerVelocity();
+	void handleCollisions();
 	void buildScene();
 	void addEnemies();
 	void addEnemy(Aircraft::Type type, float relX, float relY);
 	void spawnEnemies();
 	void destroyEntitiesOutsideView();
+	void guideMissiles();
 	sf::FloatRect getViewBounds() const;
 	sf::FloatRect getBattlefieldBounds() const;
 

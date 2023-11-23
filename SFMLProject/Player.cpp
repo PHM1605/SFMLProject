@@ -1,6 +1,6 @@
 #include "Player.hpp"
 #include "Aircraft.hpp"
-
+#include <iostream>
 // Functor = function object
 // Use for "Accelerate" events
 struct AircraftMover {
@@ -10,15 +10,6 @@ struct AircraftMover {
 		aircraft.accelerate(velocity * aircraft.getMaxSpeed());
 	}
 };
-
-// casting GameObject e.g. Aircraft to SceneNode to be put on Queue
-template<typename GameObject, typename Function>
-std::function<void(SceneNode&, sf::Time)> derivedAction(Function fn) {
-	return [=](SceneNode& node, sf::Time dt) {
-		assert(dynamic_cast<GameObject*>(&node) != nullptr);
-		fn(static_cast<GameObject&>(node), dt);
-	};
-}
 
 Player::Player() {
 	mKeyBinding[sf::Keyboard::Left] = MoveLeft;
@@ -84,6 +75,7 @@ bool Player::isRealtimeAction(Action action) {
 	case MoveRight:
 	case MoveDown:
 	case MoveUp:
+	case Fire:
 		return true;
 	default:
 		return false;

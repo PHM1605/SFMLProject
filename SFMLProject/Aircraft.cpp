@@ -8,16 +8,44 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	Entity(Table[type].hitpoints),
 	mType(type),
 	mSprite(textures.get(Table[type].texture)), // convert Aircraft::Type e.g. 'Eagle' enum to Textures::ID enum 
+	mFireCommand(),
+	mMissileCommand(),
+	mFireCountdown(sf::Time::Zero),
+	mIsFiring(false),
+	mIsLaunchingMissile(false),
+	mIsMarkedForRemoval(false),
+	mFireRateLevel(1),
+	mSpreadLevel(1),
+	mMissileAmmo(2),
+	mDropPickupCommand(),
 	mTravelledDistance(0.f),
 	mDirectionIndex(0),
-	mHealthDisplay(nullptr)
+	mHealthDisplay(nullptr),
+	mMissileDisplay(nullptr)
 {	
-	sf::FloatRect bounds = mSprite.getLocalBounds();
-	mSprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+	centerOrigin(mSprite);
+
+	mFireCommand.category = Category::SceneAirLayer;
+	mFireCommand.action = [this, &textures](SceneNode& node, sf::Time) {
+		createBullets(node, textures);
+	};
+
+	mMissileCommand.category = Category::SceneAirLayer;
+	mMissileCommand.action = [this, &textures](SceneNode& node, sf::Time) {
+		createProjectile(node, Projectile::Missile, 0.f, 0.5f, textures);
+	};
 
 	std::unique_ptr<TextNode> healthDisplay(new TextNode(fonts, ""));
 	mHealthDisplay = healthDisplay.get();
 	attachChild(std::move(healthDisplay));
+
+	if (getCategory() == Category::PlayerAircraft) {
+		std::unique_ptr<TextNode> missileDisplay(new TextNode(fonts, ""));
+		missileDisplay->setPosition(0, 70);
+		mMissileDisplay = missileDisplay.get();
+		attachChild(std::move(missileDisplay));
+	}
+
 	updateTexts();
 }
 
@@ -26,24 +54,67 @@ void Aircraft::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) co
 }
 
 void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands) {
+	if (isDestroyed()) {
+		//checkPickupDrop(commands);
+		mIsMarkedForRemoval = true;
+		return;
+	}
+	// Check if bullets or missiles are fired
+	checkProjectileLaunch(dt, commands);
 	updateMovementPattern(dt);
 	Entity::updateCurrent(dt, commands);
 	updateTexts();
 }
 
 unsigned int Aircraft::getCategory() const {
-	switch (mType) {
-	case Eagle:
+	if (isAllied())
 		return Category::PlayerAircraft;
-	default:
+	else
 		return Category::EnemyAircraft;
-	}
 }
 
-void Aircraft::updateTexts() {
-	mHealthDisplay->setString(toString(getHitpoints()) + " HP");
-	mHealthDisplay->setPosition(0.f, 50.f);
-	mHealthDisplay->setRotation(-getRotation()); // set health text not rotating when plane rotates
+sf::FloatRect Aircraft::getBoundingRect() const {
+	return getWorldTransform().transformRect(mSprite.getGlobalBounds());
+}
+
+bool Aircraft::isMarkedForRemoval() const {
+	return mIsMarkedForRemoval;
+}
+
+bool Aircraft::isAllied() const {
+	return mType == Eagle;
+}
+
+float Aircraft::getMaxSpeed() const {
+	return Table[mType].speed;
+}
+
+void Aircraft::increaseFireRate() {
+	if (mFireRateLevel < 10)
+		++mFireRateLevel;
+}
+
+void Aircraft::increaseSpread() {
+	if (mSpreadLevel < 3)
+		++mSpreadLevel;
+}
+
+void Aircraft::collectMissiles(unsigned int count) {
+	mMissileAmmo += count;
+}
+
+void Aircraft::fire() {
+	std::cout << "here" << std::endl;
+
+	if (Table[mType].fireInterval != sf::Time::Zero)
+		mIsFiring = true;
+}
+
+void Aircraft::launchMissile() {
+	if (mMissileAmmo > 0) {
+		mIsLaunchingMissile = true;
+		--mMissileAmmo;
+	}
 }
 
 void Aircraft::updateMovementPattern(sf::Time dt) {
@@ -62,6 +133,62 @@ void Aircraft::updateMovementPattern(sf::Time dt) {
 	}
 }
 
-float Aircraft::getMaxSpeed() const {
-	return Table[mType].speed;
+void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
+	if (!isAllied())
+		fire(); // Enemy always fires
+	if (mIsFiring && mFireCountdown <= sf::Time::Zero) {
+		std::cout << "here1" << std::endl;
+
+		commands.push(mFireCommand);
+		mFireCountdown += sf::seconds(1.f / (mFireRateLevel + 1.f));
+		mIsFiring = false;
+	}
+	else if (mFireCountdown > sf::Time::Zero) {
+		mFireCountdown -= dt;
+	}
+	if (mIsLaunchingMissile) {
+		commands.push(mMissileCommand);
+		mIsLaunchingMissile = false;
+	}
+}
+
+// Bullets are attached to SceneNode i.e. main SceneGraph
+void Aircraft::createBullets(SceneNode& node, const TextureHolder& textures) const {
+	Projectile::Type type = isAllied() ? Projectile::AlliedBullet : Projectile::EnemyBullet;
+	switch (mSpreadLevel) {
+	case 1:
+		createProjectile(node, type, 0.f, 0.5f, textures);
+		break;
+	case 2:
+		createProjectile(node, type, -0.33f, 0.33f, textures);
+		createProjectile(node, type, 0.33f, 0.33f, textures);
+		break;
+	case 3:
+		createProjectile(node, type, -0.5f, 0.33f, textures);
+		createProjectile(node, type, 0.f, 0.5f, textures);
+		createProjectile(node, type, 0.5f, 0.33f, textures);
+		break;
+	}
+}
+
+void Aircraft::createProjectile(SceneNode& node, Projectile::Type type, float xOffset, float yOffset, const TextureHolder& textures) const {
+	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
+	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
+	sf::Vector2f velocity(0, projectile->getMaxSpeed());
+	float sign = isAllied() ? -1.f : 1.f;
+	projectile->setPosition(getWorldPosition() + offset * sign);
+	projectile->setVelocity(velocity * sign);
+	node.attachChild(std::move(projectile));
+}
+
+void Aircraft::updateTexts() {
+	mHealthDisplay->setString(toString(getHitpoints()) + " HP");
+	mHealthDisplay->setPosition(0.f, 50.f);
+	mHealthDisplay->setRotation(-getRotation()); // set health text not rotating when plane rotates
+	if (mMissileDisplay) {
+		if (mMissileAmmo == 0)
+			mMissileDisplay->setString("");
+		else
+			mMissileDisplay->setString("M: " + toString(mMissileAmmo));
+	}
 }

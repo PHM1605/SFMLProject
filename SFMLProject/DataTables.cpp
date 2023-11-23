@@ -14,6 +14,7 @@ std::vector<AircraftData> initializeAircraftData() {
 	data[Aircraft::Raptor].directions.push_back(Direction(45, 80));
 	data[Aircraft::Raptor].directions.push_back(Direction(-45, 160));
 	data[Aircraft::Raptor].directions.push_back(Direction(45, 80));
+	data[Aircraft::Raptor].fireInterval = sf::Time::Zero;
 
 	data[Aircraft::Avenger].hitpoints = 40;
 	data[Aircraft::Avenger].speed = 50.f;
