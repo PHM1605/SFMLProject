@@ -40,6 +40,9 @@ void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	states.transform *= getTransform();
 	drawCurrent(target, states);
 	drawChildren(target, states);
+
+	// Draw bounding rectangle - disabled by default
+	// drawBoundingRect(target, states);
 }
 
 void SceneNode::drawCurrent(sf::RenderTarget&, sf::RenderStates) const {}
@@ -73,9 +76,6 @@ sf::Transform SceneNode::getWorldTransform() const {
 	return transform;
 }
 
-unsigned int SceneNode::getCategory() const {
-	return mDefaultCategory;
-}
 
 void SceneNode::onCommand(const Command& command, sf::Time dt) {
 	if (command.category & getCategory())
@@ -83,6 +83,33 @@ void SceneNode::onCommand(const Command& command, sf::Time dt) {
 	for (Ptr& child : mChildren) {
 		child->onCommand(command, dt);
 	}
+}
+
+unsigned int SceneNode::getCategory() const {
+	return mDefaultCategory;
+}
+
+void SceneNode::checkSceneCollision(SceneNode& sceneGraph, std::set<Pair>& collisionPairs) {
+	checkNodeCollision(sceneGraph, collisionPairs);
+	for (Ptr& child : sceneGraph.mChildren)
+		checkSceneCollision(*child, collisionPairs);
+}
+
+// Check collision between (currentNode & its children) versus ("node" argument)
+void SceneNode::checkNodeCollision(SceneNode& node, std::set<Pair>& collisionPairs) {
+	if (this != &node && collision(*this, node) && !isDestroyed() && !node.isDestroyed())
+		collisionPairs.insert(std::minmax(this, &node)); // minmax to make collision between "this"/"&node" same as "&node"/"this"
+	for (Ptr& child : mChildren)
+		child->checkNodeCollision(node, collisionPairs);
+}
+
+void SceneNode::removeWrecks() {
+	// Rearrange mChildren so that elements with isMarkedForRemoval = true are at the end
+	auto wreckfieldBegin = std::remove_if(mChildren.begin(), mChildren.end(), std::mem_fn(&SceneNode::isMarkedForRemoval));
+	mChildren.erase(wreckfieldBegin, mChildren.end());
+
+	// Call function recursively for all remaining children
+	std::for_each(mChildren.begin(), mChildren.end(), std::mem_fn(&SceneNode::removeWrecks));
 }
 
 sf::FloatRect SceneNode::getBoundingRect() const {
@@ -96,6 +123,10 @@ bool SceneNode::isMarkedForRemoval() const {
 // By default, SceneNode is not destroyed
 bool SceneNode::isDestroyed() const {
 	return false;
+}
+
+bool collision(const SceneNode& lhs, const SceneNode& rhs) {
+	return lhs.getBoundingRect().intersects(rhs.getBoundingRect());
 }
 
 float distance(const SceneNode& lhs, const SceneNode& rhs) {

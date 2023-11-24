@@ -9,7 +9,7 @@
 const sf::Time Application::timePerFrame = sf::seconds(1.f / 60.f);
 
 Application::Application()
-	: mWindow(sf::VideoMode(640, 480), "States", sf::Style::Close),
+	: mWindow(sf::VideoMode(640, 480), "Gameplay", sf::Style::Close),
 	mTextures(),
 	mFonts(),
 	mPlayer(),
@@ -29,15 +29,6 @@ Application::Application()
 	mStatisticsText.setCharacterSize(10u);
 	registerStates();
 	mStateStack.pushState(States::Title);
-}
-
-void Application::registerStates() {
-	mStateStack.registerState<TitleState>(States::Title);
-	mStateStack.registerState<MenuState>(States::Menu);
-	mStateStack.registerState<GameState>(States::Game);
-	mStateStack.registerState<PauseState>(States::Pause);
-	mStateStack.registerState<SettingsState>(States::Settings);
-	//mStateStack.registerState<GameOverState>(States::GameOver);
 }
 
 void Application::run() {
@@ -70,6 +61,14 @@ void Application::update(sf::Time elapsedTime) {
 	mStateStack.update(elapsedTime);
 }
 
+void Application::render() {
+	mWindow.clear();
+	mStateStack.draw();
+	mWindow.setView(mWindow.getDefaultView());
+	mWindow.draw(mStatisticsText);
+	mWindow.display();
+}
+
 void Application::updateStatistics(sf::Time elapsedTime) {
 	mStatisticsUpdateTime += elapsedTime;
 	mStatisticsNumFrames += 1;
@@ -80,11 +79,11 @@ void Application::updateStatistics(sf::Time elapsedTime) {
 	}
 }
 
-void Application::render() {
-	mWindow.clear();
-	mStateStack.draw();
-	mWindow.setView(mWindow.getDefaultView());
-	mWindow.draw(mStatisticsText);
-	mWindow.display();
+void Application::registerStates() {
+	mStateStack.registerState<TitleState>(States::Title);
+	mStateStack.registerState<MenuState>(States::Menu);
+	mStateStack.registerState<GameState>(States::Game);
+	mStateStack.registerState<PauseState>(States::Pause);
+	mStateStack.registerState<SettingsState>(States::Settings);
+	mStateStack.registerState<GameOverState>(States::GameOver);
 }
-
