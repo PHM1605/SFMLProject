@@ -133,6 +133,8 @@ void Aircraft::updateMovementPattern(sf::Time dt) {
 }
 
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
+	if (!isAllied())
+		std::cout << mIsFiring << std::endl;
 	if (mIsFiring && mFireCountdown <= sf::Time::Zero) {
 		commands.push(mFireCommand);
 		mFireCountdown += Table[mType].fireInterval / (mFireRateLevel + 1.f);
