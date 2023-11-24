@@ -30,7 +30,10 @@ void World::update(sf::Time dt) {
 	while (!mCommandQueue.isEmpty())
 		mSceneGraph.onCommand(mCommandQueue.pop(), dt);
 	adaptPlayerVelocity();
+	handleCollisions();
+	mSceneGraph.removeWrecks();
 	spawnEnemies();
+
 	mSceneGraph.update(dt, mCommandQueue);
 	adaptPlayerPosition();
 }
@@ -59,6 +62,75 @@ void World::loadTextures() {
 	mTextures.load(Textures::Desert, "Media/Textures/Desert.png");
 	mTextures.load(Textures::Bullet, "Media/Textures/Bullet.png");
 	mTextures.load(Textures::Missile, "Media/Textures/Missile.png");
+	mTextures.load(Textures::HealthRefill, "Media/Textures/HealthRefill.png");
+	mTextures.load(Textures::MissileRefill, "Media/Textures/MissileRefill.png");
+	mTextures.load(Textures::FireSpread, "Media/Textures/FireSpread.png");
+	mTextures.load(Textures::FireRate, "Media/Textures/FireRate.png");
+}
+
+void World::adaptPlayerPosition() {
+	const float borderDistance = 40.f;
+	sf::FloatRect viewBounds(
+		mWorldView.getCenter() - mWorldView.getSize() / 2.f,
+		mWorldView.getSize()
+	);
+	sf::Vector2f position = mPlayerAircraft->getPosition();
+	position.x = std::max(position.x, viewBounds.left + borderDistance);
+	position.x = std::min(position.x, viewBounds.left + viewBounds.width - borderDistance);
+	position.y = std::max(position.y, viewBounds.top + borderDistance);
+	position.y = std::min(position.y, viewBounds.top + viewBounds.height - borderDistance);
+	mPlayerAircraft->setPosition(position);
+}
+
+void World::adaptPlayerVelocity() {
+	sf::Vector2f velocity = mPlayerAircraft->getVelocity();
+	// when press two keys -> move diagonal is sqrt(speed^2 + speed^2)=sqrt(2)*speed -> should be reduced by sqrt(2)
+	if (velocity.x != 0.f && velocity.y != 0.f)
+		mPlayerAircraft->setVelocity(velocity / std::sqrt(2.f));
+	mPlayerAircraft->accelerate(0.f, mScrollSpeed);
+}
+
+bool matchesCategories(SceneNode::Pair& colliders, Category::Type type1, Category::Type type2) {
+	unsigned int category1 = colliders.first->getCategory();
+	unsigned int category2 = colliders.second->getCategory();
+	if (type1 & category1 && type2 & category2) {
+		return true;
+	}
+	else if (type1 & category2 && type2 & category1) {
+		std::swap(colliders.first, colliders.second);
+		return true;
+	}
+	else
+		return false;
+}
+
+void World::handleCollisions() {
+	std::set<SceneNode::Pair> collisionPairs;
+	mSceneGraph.checkSceneCollision(mSceneGraph, collisionPairs);
+	for (SceneNode::Pair pair : collisionPairs) {
+		if (matchesCategories(pair, Category::PlayerAircraft, Category::EnemyAircraft)) {
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& enemy = static_cast<Aircraft&>(*pair.second);
+			// Collision: player damage = enemy's remaining HP
+			player.damage(enemy.getHitpoints());
+			enemy.destroy();
+		}
+		else if (matchesCategories(pair, Category::PlayerAircraft, Category::Pickup)) {
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& pickup = static_cast<Pickup&>(*pair.second);
+			// Apply pickup effect to player, destroy pickup
+			pickup.apply(player);
+			pickup.destroy();
+		}
+		else if (matchesCategories(pair, Category::EnemyAircraft, Category::AlliedProjectile)
+			|| matchesCategories(pair, Category::PlayerAircraft, Category::EnemyProjectile)) {
+			auto& aircraft = static_cast<Aircraft&>(*pair.first);
+			auto& projectile = static_cast<Projectile&>(*pair.second);
+			// Apply projectile damage to aircraft, destroy projectile
+			aircraft.damage(projectile.getDamage());
+			projectile.destroy();
+		}
+	}
 }
 
 void World::buildScene() {
@@ -85,28 +157,6 @@ void World::buildScene() {
 	mSceneLayers[Air]->attachChild(std::move(leader));
 
 	addEnemies();
-}
-
-void World::adaptPlayerVelocity() {
-	sf::Vector2f velocity = mPlayerAircraft->getVelocity();
-	// when press two keys -> move diagonal is sqrt(speed^2 + speed^2)=sqrt(2)*speed -> should be reduced by sqrt(2)
-	if (velocity.x != 0.f && velocity.y != 0.f)
-		mPlayerAircraft->setVelocity(velocity / std::sqrt(2.f));
-	mPlayerAircraft->accelerate(0.f, mScrollSpeed);
-}
-
-void World::adaptPlayerPosition() {
-	const float borderDistance = 40.f;
-	sf::FloatRect viewBounds(
-		mWorldView.getCenter() - mWorldView.getSize() / 2.f,
-		mWorldView.getSize()
-		);
-	sf::Vector2f position = mPlayerAircraft->getPosition();
-	position.x = std::max(position.x, viewBounds.left + borderDistance);
-	position.x = std::min(position.x, viewBounds.left + viewBounds.width - borderDistance);
-	position.y = std::max(position.y, viewBounds.top + borderDistance);
-	position.y = std::min(position.y, viewBounds.top + viewBounds.height - borderDistance);
-	mPlayerAircraft->setPosition(position);
 }
 
 void World::addEnemies() {

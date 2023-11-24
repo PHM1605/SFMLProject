@@ -153,6 +153,7 @@
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="ParallelTask.cpp" />
     <ClCompile Include="PauseState.cpp" />
+    <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="SceneNode.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="MenuState.hpp" />
     <ClInclude Include="ParallelTask.hpp" />
     <ClInclude Include="PauseState.hpp" />
+    <ClInclude Include="Pickup.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Projectile.hpp" />
     <ClInclude Include="ResourceIdentifiers.hpp" />

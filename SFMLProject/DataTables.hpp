@@ -2,6 +2,7 @@
 #include "ResourceIdentifiers.hpp"
 #include "Aircraft.hpp"
 #include "Projectile.hpp"
+#include "Pickup.hpp"
 
 struct Direction {
 	Direction(float angle, float distance):
@@ -26,5 +27,11 @@ struct ProjectileData {
 	Textures::ID texture;
 };
 
+struct PickupData {
+	std::function<void(Aircraft&)> action;
+	Textures::ID texture;
+};
+
 std::vector<AircraftData> initializeAircraftData();
 std::vector<ProjectileData> initializeProjectileData();
+std::vector<PickupData> initializePickupData();

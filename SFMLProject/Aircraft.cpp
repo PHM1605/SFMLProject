@@ -39,6 +39,8 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 		createProjectile(node, Projectile::Missile, 0.f, 0.5f, textures);
 	};
 
+
+
 	std::unique_ptr<TextNode> healthDisplay(new TextNode(fonts, ""));
 	mHealthDisplay = healthDisplay.get();
 	attachChild(std::move(healthDisplay));
