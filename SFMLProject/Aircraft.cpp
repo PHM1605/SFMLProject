@@ -26,7 +26,10 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 {	
 	centerOrigin(mSprite);
 
-	mFireCommand.category = Category::PlayerAircraft | Category::EnemyAircraft;
+	if (mType == Type::Eagle)
+		mFireCommand.category = Category::PlayerAircraft;
+	else
+		mFireCommand.category = Category::EnemyAircraft;
 	mFireCommand.action = [this, &textures](SceneNode& node, sf::Time) {
 		createBullets(node, textures);
 	};
@@ -54,6 +57,7 @@ void Aircraft::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) co
 }
 
 void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands) {
+
 	if (isDestroyed()) {
 		//checkPickupDrop(commands);
 		mIsMarkedForRemoval = true;
@@ -133,8 +137,7 @@ void Aircraft::updateMovementPattern(sf::Time dt) {
 
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
 	if (!isAllied()) {
-		commands.push(mFireCommand);
-		return;
+		fire();
 	}
 	if (mIsFiring && mFireCountdown <= sf::Time::Zero) {
 		commands.push(mFireCommand);
@@ -173,7 +176,7 @@ void Aircraft::createProjectile(SceneNode& node, Projectile::Type type, float xO
 	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
 	sf::Vector2f offset(xOffset * mSprite.getGlobalBounds().width, yOffset * mSprite.getGlobalBounds().height);
 	sf::Vector2f velocity(0, projectile->getMaxSpeed());
-	float sign = isAllied() ? -1.f : 1.f;
+	float sign = -1.f;
 	projectile->setPosition(offset * sign);
 	projectile->setVelocity(velocity * sign);
 	node.attachChild(std::move(projectile));

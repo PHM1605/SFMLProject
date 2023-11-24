@@ -223,5 +223,8 @@
     <Image Include="Media\Textures\Missile.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Media\Textures\Bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

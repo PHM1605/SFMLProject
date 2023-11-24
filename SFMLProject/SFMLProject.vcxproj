@@ -205,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Media\Textures\Avenger.png" />
+    <Image Include="Media\Textures\Bullet.png" />
     <Image Include="Media\Textures\ButtonNormal.png" />
     <Image Include="Media\Textures\ButtonPressed.png" />
     <Image Include="Media\Textures\ButtonSelected.png" />
