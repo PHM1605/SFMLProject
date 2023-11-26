@@ -19,11 +19,10 @@ public:
 	void accelerate(sf::Vector2f velocity);
 	void accelerate(float vx, float vy);
 	sf::Vector2f getVelocity() const;
-
+	int getHitpoints() const;
 	void repair(int points);
 	void damage(int points);
 	void destroy();
-
-	int getHitpoints() const;
+	virtual void remove();
 	bool isDestroyed() const;
 };

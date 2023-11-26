@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <SFML/Graphics.hpp>
+#include <random>
 
 // std::to_string does not work on MinGW
 template <typename T>
@@ -20,3 +21,4 @@ float toRadian(float degree);
 
 float length(sf::Vector2f vector);
 sf::Vector2f unitVector(sf::Vector2f vector);
+int randomInt(int exclusiveMax);

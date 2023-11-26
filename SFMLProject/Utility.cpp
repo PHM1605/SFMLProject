@@ -1,5 +1,12 @@
 #include "Utility.hpp"
-#include <cmath>
+
+namespace {
+	std::default_random_engine createRandomEngine() {
+		auto seed = static_cast<unsigned long>(std::time(nullptr));
+		return std::default_random_engine(seed);
+	}
+	auto RandomEngine = createRandomEngine();
+}
 
 // center of sprite is its origin
 void centerOrigin(sf::Sprite& sprite) {
@@ -28,4 +35,9 @@ float length(sf::Vector2f vector) {
 sf::Vector2f unitVector(sf::Vector2f vector) {
 	assert(vector != sf::Vector2f(0.f, 0.f));
 	return vector / length(vector);
+}
+
+int randomInt(int exclusiveMax) {
+	std::uniform_int_distribution<> distr(0, exclusiveMax - 1);
+	return distr(RandomEngine);
 }

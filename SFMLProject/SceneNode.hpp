@@ -30,7 +30,7 @@ public:
 	virtual sf::FloatRect getBoundingRect() const;
 	virtual bool isMarkedForRemoval() const;
 	virtual bool isDestroyed() const;
-private:
+protected:
 	std::vector<Ptr> mChildren;
 	SceneNode* mParent;
 	Category::Type mDefaultCategory;

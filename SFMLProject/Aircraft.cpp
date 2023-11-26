@@ -8,13 +8,15 @@ namespace {
 Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& fonts) :
 	Entity(Table[type].hitpoints),
 	mType(type),
-	mSprite(textures.get(Table[type].texture)), // convert Aircraft::Type e.g. 'Eagle' enum to Textures::ID enum 
+	mSprite(textures.get(Table[type].texture), Table[type].textureRect), // convert Aircraft::Type e.g. 'Eagle' enum to Textures::ID enum 
+	//mExplosion(textures.get(Textures::Explosion)),
 	mFireCommand(),
 	mMissileCommand(),
 	mFireCountdown(sf::Time::Zero),
 	mIsFiring(false),
 	mIsLaunchingMissile(false),
-	mIsMarkedForRemoval(false),
+	mShowExplosion(true),
+	mSpawnedPickup(false),
 	mFireRateLevel(0),
 	mSpreadLevel(1),
 	mMissileAmmo(2),
@@ -23,9 +25,10 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	mDirectionIndex(0),
 	mHealthDisplay(nullptr),
 	mMissileDisplay(nullptr)
-{	
+{
 	centerOrigin(mSprite);
 
+	// mFireCommand.category = Category::SceneAirLayer;
 	if (mType == Type::Eagle)
 		mFireCommand.category = Category::PlayerAircraft;
 	else
@@ -34,12 +37,16 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 		createBullets(node, textures);
 	};
 
+	// mMissielCommand.category = Category::SceneAirLayer;
 	mMissileCommand.category = Category::PlayerAircraft;
 	mMissileCommand.action = [this, &textures](SceneNode& node, sf::Time) {
 		createProjectile(node, Projectile::Missile, 0.f, 0.5f, textures);
 	};
 
-
+	mDropPickupCommand.category = Category::SceneAirLayer;
+	mDropPickupCommand.action = [this, &textures](SceneNode& node, sf::Time) {
+		createPickup(node, textures);
+	};
 
 	std::unique_ptr<TextNode> healthDisplay(new TextNode(fonts, ""));
 	mHealthDisplay = healthDisplay.get();
@@ -55,22 +62,25 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 }
 
 void Aircraft::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(mSprite, states);
+	if (isDestroyed() && mShowExplosion)
+		target.draw(mExplosion, states);
+	else
+		target.draw(mSprite, states);
 }
 
 void Aircraft::updateCurrent(sf::Time dt, CommandQueue& commands) {
-
+	updateTexts();
+	updateRollAnimation();
 	if (isDestroyed()) {
-		//checkPickupDrop(commands);
-		mIsMarkedForRemoval = true;
+		checkPickupDrop(commands);
+		mExplosion.update(dt);
 		return;
 	}
-	//std::cout << mIsFiring << std::endl;
 	// Check if bullets or missiles are fired
 	checkProjectileLaunch(dt, commands);
 	updateMovementPattern(dt);
 	Entity::updateCurrent(dt, commands);
-	updateTexts();
+	
 }
 
 unsigned int Aircraft::getCategory() const {
@@ -85,7 +95,12 @@ sf::FloatRect Aircraft::getBoundingRect() const {
 }
 
 bool Aircraft::isMarkedForRemoval() const {
-	return mIsMarkedForRemoval;
+	return isDestroyed() && (mExplosion.isFinished() || !mShowExplosion);
+}
+
+void Aircraft::remove() {
+	Entity::remove();
+	mShowExplosion = false;
 }
 
 bool Aircraft::isAllied() const {
@@ -111,8 +126,8 @@ void Aircraft::collectMissiles(unsigned int count) {
 }
 
 void Aircraft::fire() {
-	//if (Table[mType].fireInterval != sf::Time::Zero)
-	mIsFiring = true;
+	if (Table[mType].fireInterval != sf::Time::Zero)
+		mIsFiring = true;
 }
 
 void Aircraft::launchMissile() {
@@ -138,6 +153,14 @@ void Aircraft::updateMovementPattern(sf::Time dt) {
 	}
 }
 
+void Aircraft::checkPickupDrop(CommandQueue& commands) {
+	
+	if (!isAllied() && randomInt(3) == 0 && !mSpawnedPickup) {
+		commands.push(mDropPickupCommand);
+	}
+	mSpawnedPickup = true;
+}
+
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
 	if (!isAllied()) {
 		fire();
@@ -149,6 +172,7 @@ void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
 	}
 	else if (mFireCountdown > sf::Time::Zero) {
 		mFireCountdown -= dt;
+		mIsFiring = false;
 	}
 	if (mIsLaunchingMissile) {
 		commands.push(mMissileCommand);
@@ -182,6 +206,15 @@ void Aircraft::createProjectile(SceneNode& node, Projectile::Type type, float xO
 	projectile->setPosition(offset * sign);
 	projectile->setVelocity(velocity * sign);
 	node.attachChild(std::move(projectile));
+}
+
+void Aircraft::createPickup(SceneNode& node, const TextureHolder& textures) const {
+	std::cout << "Create pickup!" << std::endl;
+	auto type = static_cast<Pickup::Type>(randomInt(Pickup::TypeCount));
+	std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
+	pickup->setPosition(0.f, 0.f);
+	pickup->setVelocity(0.f, 1.f);
+	node.attachChild(std::move(pickup));
 }
 
 void Aircraft::updateTexts() {

@@ -5,6 +5,7 @@
 #include "Utility.hpp"
 #include "PauseState.hpp"
 #include "SettingsState.hpp"
+#include "GameOverState.hpp"
 
 const sf::Time Application::timePerFrame = sf::seconds(1.f / 60.f);
 

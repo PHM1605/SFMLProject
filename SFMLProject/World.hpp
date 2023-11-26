@@ -9,10 +9,11 @@
 #include "SpriteNode.hpp"
 #include "CommandQueue.hpp"
 #include "Player.hpp"
+#include "ParticleNode.hpp"
 
 class World : private sf::NonCopyable {
 public:
-	World(sf::RenderWindow& window, FontHolder& fonts);
+	World(sf::RenderTarget& outputTarget, FontHolder& fonts);
 	void update(sf::Time dt);
 	void draw();
 	CommandQueue& getCommandQueue();
@@ -20,7 +21,7 @@ public:
 	bool hasPlayerReachEnd() const;
 
 private:
-	enum Layer { Background, Air, LayerCount };
+	enum Layer { Background, LowerAir, UpperAir, LayerCount };
 	struct SpawnPoint {
 		Aircraft::Type type;
 		float x;
@@ -28,7 +29,8 @@ private:
 		SpawnPoint(Aircraft::Type type, float x, float y) :
 			type(type), x(x), y(y) {}
 	};
-	sf::RenderWindow& mWindow;
+	sf::RenderTarget& mTarget;
+	sf::RenderTexture mSceneTexture;
 	sf::View mWorldView;
 	TextureHolder mTextures;
 	FontHolder& mFonts;
@@ -41,6 +43,7 @@ private:
 	Aircraft* mPlayerAircraft;
 	std::vector<SpawnPoint> mEnemySpawnPoints;
 	std::vector<Aircraft*> mActiveEnemies;
+	//BloomEffect mBloomEffect;
 	
 private:
 	void loadTextures();

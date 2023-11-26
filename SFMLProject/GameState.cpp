@@ -15,11 +15,14 @@ bool GameState::update(sf::Time dt) {
 	mWorld.update(dt);
 	if (!mWorld.hasAlivePlayer()) {
 		mPlayer.setMissionStatus(Player::MissionFailure);
-
+		requestStackPush(States::GameOver);
+	}
+	else if (mWorld.hasPlayerReachEnd()) {
+		mPlayer.setMissionStatus(Player::MissionSuccess);
+		requestStackPush(States::GameOver);
 	}
 	CommandQueue& commands = mWorld.getCommandQueue();
 	mPlayer.handleRealtimeInput(commands);
-	mWorld.update(dt);
 	return true;
 }
 

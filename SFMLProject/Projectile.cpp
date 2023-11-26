@@ -1,6 +1,7 @@
 #include "Projectile.hpp"
 #include "DataTables.hpp"
 #include "Utility.hpp"
+#include "EmitterNode.hpp"
 #include <cassert>
 
 namespace {
@@ -14,6 +15,15 @@ Projectile::Projectile(Type type, const TextureHolder& textures) :
 	mTargetDirection()
 {
 	centerOrigin(mSprite);
+	// Add particle system for missiles
+	if (isGuided()) {
+		std::unique_ptr<EmitterNode> smoke(new EmitterNode(Particle::Smoke));
+		smoke->setPosition(0.f, getBoundingRect().height / 2.f);
+		attachChild(std::move(smoke));
+		std::unique_ptr<EmitterNode> propellant(new EmitterNode(Particle::Propellant));
+		propellant->setPosition(0.f, getBoundingRect().height / 2.f);
+		attachChild(std::move(propellant));
+	}
 }
 
 void Projectile::guideTowards(sf::Vector2f position) {

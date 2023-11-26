@@ -99,6 +99,15 @@
     <ClCompile Include="Pickup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameOverState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EmitterNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -194,6 +203,18 @@
     <ClInclude Include="Pickup.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameOverState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleNode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EmitterNode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
@@ -230,6 +251,18 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Media\Textures\Bullet.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\FireRate.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\FireSpread.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\HealthRefill.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\MissileRefill.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

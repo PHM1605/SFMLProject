@@ -15,6 +15,7 @@ public:
 	Aircraft(Type type, const TextureHolder& textures, const FontHolder& fonts);
 	virtual unsigned int getCategory() const;
 	virtual sf::FloatRect getBoundingRect() const;
+	virtual void remove();
 	virtual bool isMarkedForRemoval() const;
 	bool isAllied() const;
 	float getMaxSpeed() const;
@@ -23,15 +24,18 @@ public:
 	void collectMissiles(unsigned int count);
 	void fire();
 	void launchMissile();
+	
 private:
 	Type mType;
 	sf::Sprite mSprite;
+	// Animation mExplosion;
 	Command mFireCommand;
 	Command mMissileCommand;
 	sf::Time mFireCountdown;
 	bool mIsFiring;
 	bool mIsLaunchingMissile;
-	bool mIsMarkedForRemoval;
+	bool mShowExplosion;
+	bool mSpawnedPickup;
 	int mFireRateLevel;
 	int mSpreadLevel;
 	int mMissileAmmo;
