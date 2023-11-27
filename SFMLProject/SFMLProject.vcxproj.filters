@@ -108,6 +108,9 @@
     <ClCompile Include="EmitterNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -215,6 +218,9 @@
     <ClInclude Include="EmitterNode.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
@@ -263,6 +269,24 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Media\Textures\MissileRefill.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Buttons.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Entities.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Explosion.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\FinishLine.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Jungle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Media\Textures\Particle.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

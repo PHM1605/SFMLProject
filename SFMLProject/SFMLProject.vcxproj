@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Aircraft.cpp" />
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aircraft.hpp" />
+    <ClInclude Include="Animation.hpp" />
     <ClInclude Include="Button.hpp" />
     <ClInclude Include="Category.hpp" />
     <ClInclude Include="Command.hpp" />
@@ -217,14 +219,20 @@
     <Image Include="Media\Textures\Bullet.png" />
     <Image Include="Media\Textures\ButtonNormal.png" />
     <Image Include="Media\Textures\ButtonPressed.png" />
+    <Image Include="Media\Textures\Buttons.png" />
     <Image Include="Media\Textures\ButtonSelected.png" />
     <Image Include="Media\Textures\Desert.png" />
     <Image Include="Media\Textures\Eagle.png" />
+    <Image Include="Media\Textures\Entities.png" />
+    <Image Include="Media\Textures\Explosion.png" />
+    <Image Include="Media\Textures\FinishLine.png" />
     <Image Include="Media\Textures\FireRate.png" />
     <Image Include="Media\Textures\FireSpread.png" />
     <Image Include="Media\Textures\HealthRefill.png" />
+    <Image Include="Media\Textures\Jungle.png" />
     <Image Include="Media\Textures\Missile.png" />
     <Image Include="Media\Textures\MissileRefill.png" />
+    <Image Include="Media\Textures\Particle.png" />
     <Image Include="Media\Textures\Raptor.png" />
     <Image Include="Media\Textures\TitleScreen.png" />
   </ItemGroup>
