@@ -3,6 +3,8 @@
 #include "ResourceIdentifiers.hpp"
 #include "ResourceHolder.hpp"
 #include "StateStack.hpp"
+#include "MusicPlayer.hpp"
+#include "SoundPlayer.hpp"
 
 class Application {
 public: 
@@ -20,6 +22,8 @@ private:
 	TextureHolder mTextures;
 	FontHolder mFonts;
 	Player mPlayer;
+	MusicPlayer mMusic;
+	SoundPlayer mSounds;
 	StateStack mStateStack;
 	sf::Text mStatisticsText;
 	sf::Time mStatisticsUpdateTime;

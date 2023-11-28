@@ -2,6 +2,8 @@
 #include "Component.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "Utility.hpp"
+#include "SoundPlayer.hpp"
+#include "State.hpp"
 #include <functional>
 
 namespace GUI {
@@ -11,7 +13,7 @@ namespace GUI {
 		typedef std::function<void()> Callback;
 		enum Type {Normal, Selected, Pressed, ButtonCount};
 	public:
-		Button(const FontHolder& fonts, const TextureHolder& textures);
+		Button(State::Context context);
 		void setCallback(Callback callback);
 		void setText(const std::string& text);
 		void setToggle(bool flag);
@@ -29,6 +31,7 @@ namespace GUI {
 		sf::Sprite mSprite;
 		sf::Text mText;
 		bool mIsToggle;
+		SoundPlayer& mSounds;
 	private:
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 		void changeTexture(Type buttonType);

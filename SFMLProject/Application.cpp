@@ -14,12 +14,15 @@ Application::Application()
 	mTextures(),
 	mFonts(),
 	mPlayer(),
-	mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer)),
+	mMusic(),
+	mSounds(),
+	mStateStack(State::Context(mWindow, mTextures, mFonts, mPlayer, mMusic, mSounds)),
 	mStatisticsText(),
 	mStatisticsUpdateTime(),
 	mStatisticsNumFrames(0)
 {
 	mWindow.setKeyRepeatEnabled(false);
+	mWindow.setVerticalSyncEnabled(true);
 	mFonts.load(Fonts::Main, "Media/Sansation.ttf");
 	mTextures.load(Textures::TitleScreen, "Media/Textures/TitleScreen.png");
 	mTextures.load(Textures::Buttons, "Media/Textures/Buttons.png");
@@ -28,6 +31,7 @@ Application::Application()
 	mStatisticsText.setCharacterSize(10u);
 	registerStates();
 	mStateStack.pushState(States::Title);
+	mMusic.setVolume(25.f);
 }
 
 void Application::run() {
