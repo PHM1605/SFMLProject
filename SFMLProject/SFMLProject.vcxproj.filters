@@ -111,6 +111,12 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PostEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BloomEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -221,9 +227,20 @@
     <ClInclude Include="Animation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PostEffect.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BloomEffect.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
+    <None Include="Media\Shaders\Add.frag" />
+    <None Include="Media\Shaders\Brightness.frag" />
+    <None Include="Media\Shaders\DownSample.frag" />
+    <None Include="Media\Shaders\Fullpass.vert" />
+    <None Include="Media\Shaders\GaussianBlur.frag" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Media\Sansation.ttf" />

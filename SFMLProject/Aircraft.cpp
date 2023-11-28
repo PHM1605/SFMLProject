@@ -9,7 +9,7 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	Entity(Table[type].hitpoints),
 	mType(type),
 	mSprite(textures.get(Table[type].texture), Table[type].textureRect), // convert Aircraft::Type e.g. 'Eagle' enum to Textures::ID enum 
-	//mExplosion(textures.get(Textures::Explosion)),
+	mExplosion(textures.get(Textures::Explosion)),
 	mFireCommand(),
 	mMissileCommand(),
 	mFireCountdown(sf::Time::Zero),
@@ -26,9 +26,13 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 	mHealthDisplay(nullptr),
 	mMissileDisplay(nullptr)
 {
+	mExplosion.setFrameSize(sf::Vector2i(256, 256));
+	mExplosion.setNumFrames(16);
+	mExplosion.setDuration(sf::seconds(1));
 	centerOrigin(mSprite);
+	centerOrigin(mExplosion);
 
-	// mFireCommand.category = Category::SceneAirLayer;
+	//mFireCommand.category = Category::SceneAirLayer;
 	if (mType == Type::Eagle)
 		mFireCommand.category = Category::PlayerAircraft;
 	else
@@ -37,7 +41,7 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 		createBullets(node, textures);
 	};
 
-	// mMissielCommand.category = Category::SceneAirLayer;
+	//mMissileCommand.category = Category::SceneAirLayer;
 	mMissileCommand.category = Category::PlayerAircraft;
 	mMissileCommand.action = [this, &textures](SceneNode& node, sf::Time) {
 		createProjectile(node, Projectile::Missile, 0.f, 0.5f, textures);
@@ -226,5 +230,16 @@ void Aircraft::updateTexts() {
 			mMissileDisplay->setString("");
 		else
 			mMissileDisplay->setString("M: " + toString(mMissileAmmo));
+	}
+}
+
+void Aircraft::updateRollAnimation() {
+	if (Table[mType].hasRollAnimation) {
+		sf::IntRect textureRect = Table[mType].textureRect;
+		if (getVelocity().x < 0.f)
+			textureRect.left += textureRect.width;
+		else if (getVelocity().x > 0.f)
+			textureRect.left += 2 * textureRect.width;
+		mSprite.setTextureRect(textureRect);
 	}
 }

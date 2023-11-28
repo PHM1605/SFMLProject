@@ -7,6 +7,7 @@
 #include "CommandQueue.hpp"
 #include "Projectile.hpp"
 #include "Pickup.hpp"
+#include "Animation.hpp"
 
 class Aircraft : public Entity {
 public:
@@ -28,7 +29,7 @@ public:
 private:
 	Type mType;
 	sf::Sprite mSprite;
-	// Animation mExplosion;
+	Animation mExplosion;
 	Command mFireCommand;
 	Command mMissileCommand;
 	sf::Time mFireCountdown;
@@ -54,4 +55,5 @@ private:
 	void createProjectile(SceneNode& node, Projectile::Type type, float xOffset, float yOffset, const TextureHolder& textures) const;
 	void createPickup(SceneNode& node, const TextureHolder& textures) const;
 	void updateTexts();
+	void updateRollAnimation();
 };

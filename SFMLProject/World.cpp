@@ -38,8 +38,17 @@ void World::update(sf::Time dt) {
 }
 
 void World::draw() {
-	mTarget.setView(mWorldView);
-	mTarget.draw(mSceneGraph);
+	if (PostEffect::isSupported()) {
+		mSceneTexture.clear();
+		mSceneTexture.setView(mWorldView);
+		mSceneTexture.draw(mSceneGraph);
+		mSceneTexture.display();
+		mBloomEffect.apply(mSceneTexture, mTarget);
+	}
+	else {
+		mTarget.setView(mWorldView);
+		mTarget.draw(mSceneGraph);
+	}
 }
 
 CommandQueue& World::getCommandQueue() {

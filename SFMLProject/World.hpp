@@ -10,6 +10,8 @@
 #include "CommandQueue.hpp"
 #include "Player.hpp"
 #include "ParticleNode.hpp"
+#include "PostEffect.hpp"
+#include "BloomEffect.hpp"
 
 class World : private sf::NonCopyable {
 public:
@@ -30,7 +32,7 @@ private:
 			type(type), x(x), y(y) {}
 	};
 	sf::RenderTarget& mTarget;
-	sf::RenderTexture mSceneTexture;
+	sf::RenderTexture mSceneTexture; // scene buffer - for post effect
 	sf::View mWorldView;
 	TextureHolder mTextures;
 	FontHolder& mFonts;
@@ -43,7 +45,7 @@ private:
 	Aircraft* mPlayerAircraft;
 	std::vector<SpawnPoint> mEnemySpawnPoints;
 	std::vector<Aircraft*> mActiveEnemies;
-	//BloomEffect mBloomEffect;
+	BloomEffect mBloomEffect;
 	
 private:
 	void loadTextures();

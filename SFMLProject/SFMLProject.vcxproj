@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="Aircraft.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="BloomEffect.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="PauseState.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SettingsState.cpp" />
@@ -173,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="Aircraft.hpp" />
     <ClInclude Include="Animation.hpp" />
+    <ClInclude Include="BloomEffect.hpp" />
     <ClInclude Include="Button.hpp" />
     <ClInclude Include="Category.hpp" />
     <ClInclude Include="Command.hpp" />
@@ -194,6 +197,7 @@
     <ClInclude Include="PauseState.hpp" />
     <ClInclude Include="Pickup.hpp" />
     <ClInclude Include="Player.hpp" />
+    <ClInclude Include="PostEffect.hpp" />
     <ClInclude Include="Projectile.hpp" />
     <ClInclude Include="ResourceIdentifiers.hpp" />
     <ClInclude Include="SceneNode.hpp" />
@@ -209,6 +213,11 @@
     <ClInclude Include="World.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Media\Shaders\Add.frag" />
+    <None Include="Media\Shaders\Brightness.frag" />
+    <None Include="Media\Shaders\DownSample.frag" />
+    <None Include="Media\Shaders\Fullpass.vert" />
+    <None Include="Media\Shaders\GaussianBlur.frag" />
     <None Include="openal32.dll" />
   </ItemGroup>
   <ItemGroup>

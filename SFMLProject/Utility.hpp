@@ -4,6 +4,7 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 #include <random>
+#include "Animation.hpp"
 
 // std::to_string does not work on MinGW
 template <typename T>
@@ -15,6 +16,7 @@ std::string toString(const T & value) {
 
 void centerOrigin(sf::Sprite& sprite);
 void centerOrigin(sf::Text& text);
+void centerOrigin(Animation& animation);
 
 float toDegree(float radian);
 float toRadian(float degree);
