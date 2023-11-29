@@ -182,8 +182,6 @@ void World::buildScene() {
 	std::unique_ptr<SoundNode> soundNode(new SoundNode(mSounds));
 	mSceneGraph.attachChild(std::move(soundNode));
 
-
-
 	// Add player's aircraft
 	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, mTextures, mFonts));
 	mPlayerAircraft = player.get();

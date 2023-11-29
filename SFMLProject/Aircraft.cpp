@@ -48,7 +48,7 @@ Aircraft::Aircraft(Type type, const TextureHolder& textures, const FontHolder& f
 		createProjectile(node, Projectile::Missile, 0.f, 0.5f, textures);
 	};
 
-	mDropPickupCommand.category = Category::SceneAirLayer;
+	mDropPickupCommand.category = Category::Pickup;
 	mDropPickupCommand.action = [this, &textures](SceneNode& node, sf::Time) {
 		createPickup(node, textures);
 	};
@@ -182,6 +182,15 @@ void Aircraft::checkPickupDrop(CommandQueue& commands) {
 	mSpawnedPickup = true;
 }
 
+void Aircraft::createPickup(SceneNode& node, const TextureHolder& textures) const {
+	std::cout << "Create pickup!" << std::endl;
+	auto type = static_cast<Pickup::Type>(randomInt(Pickup::TypeCount));
+	std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
+	pickup->setPosition(0.f, 0.f);
+	pickup->setVelocity(0.f, 1.f);
+	node.attachChild(std::move(pickup));
+}
+
 void Aircraft::checkProjectileLaunch(sf::Time dt, CommandQueue& commands) {
 	if (!isAllied()) {
 		fire();
@@ -229,15 +238,6 @@ void Aircraft::createProjectile(SceneNode& node, Projectile::Type type, float xO
 	projectile->setPosition(offset * sign);
 	projectile->setVelocity(velocity * sign);
 	node.attachChild(std::move(projectile));
-}
-
-void Aircraft::createPickup(SceneNode& node, const TextureHolder& textures) const {
-	std::cout << "Create pickup!" << std::endl;
-	auto type = static_cast<Pickup::Type>(randomInt(Pickup::TypeCount));
-	std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
-	pickup->setPosition(0.f, 0.f);
-	pickup->setVelocity(0.f, 1.f);
-	node.attachChild(std::move(pickup));
 }
 
 void Aircraft::updateTexts() {
