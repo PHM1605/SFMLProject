@@ -30,6 +30,8 @@ public:
 	virtual void draw() = 0;
 	virtual bool update(sf::Time dt) = 0;
 	virtual bool handleEvent(const sf::Event& event) = 0;
+	virtual void onActivate();
+	virtual void onDestroy();
 
 protected:
 	void requestStackPush(States::ID stateID);

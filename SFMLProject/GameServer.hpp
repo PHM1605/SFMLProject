@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
+#include "NetworkProtocol.hpp"
 
 class GameServer {
 public:
@@ -33,6 +34,9 @@ private:
 
 	void handleIncomingConnections();
 	void handleDisconnections();
+
+	void informWorldState(sf::TcpSocket& socket); // send World state to a Client
+	void broadcastMessage(const std::string& message); // send a string message to all Clients to be printed on screen
 	void sendToAll(sf::Packet& packet);
 	void updateClientState();
 
@@ -44,11 +48,14 @@ private:
 	sf::Time mClientTimeoutTime;
 	std::size_t mMaxConnectedPlayers;
 	std::size_t mConnectedPlayers; 
-	float mWorldHeight;
+	float mWorldHeight; // whole map
+	sf::FloatRect mBattleFieldRect;
+	float mBattleFieldScrollSpeed;
 	std::size_t mAircraftCount; // total number of aircraft over all peers
-	std::map<sf::Int32, AircraftInfo> mAircraftInfo; // map Aircraft ID and Info struct
+	// map Aircraft ID and Info struct; used when new Peer connects and create a new Aircraft
+	std::map<sf::Int32, AircraftInfo> mAircraftInfo; 
 	std::vector<PeerPtr> mPeers; // total number of peers PLUS one
-	sf::Int32 mAircraftIdentifierCounter;
+	sf::Int32 mAircraftIdentifierCounter; // to keep track off the ID of all Aircrafts
 	bool mWaitingThreadEnd;
 	sf::Time mLastSpawnTime;
 	sf::Time mTimeForNextSpawn; // starts at 1
