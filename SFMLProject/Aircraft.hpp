@@ -8,6 +8,7 @@
 #include "Projectile.hpp"
 #include "Pickup.hpp"
 #include "Animation.hpp"
+#include "SoundNode.hpp"
 
 class Aircraft : public Entity {
 public:
@@ -25,6 +26,7 @@ public:
 	void collectMissiles(unsigned int count);
 	void fire();
 	void launchMissile();
+	void playLocalSound(CommandQueue& commands, SoundEffect::ID effect);
 	
 private:
 	Type mType;
@@ -36,6 +38,7 @@ private:
 	bool mIsFiring;
 	bool mIsLaunchingMissile;
 	bool mShowExplosion;
+	bool mPlayedExplosionSound;
 	bool mSpawnedPickup;
 	int mFireRateLevel;
 	int mSpreadLevel;

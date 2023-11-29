@@ -12,10 +12,11 @@
 #include "ParticleNode.hpp"
 #include "PostEffect.hpp"
 #include "BloomEffect.hpp"
+#include "SoundPlayer.hpp"
 
 class World : private sf::NonCopyable {
 public:
-	World(sf::RenderTarget& outputTarget, FontHolder& fonts);
+	World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds);
 	void update(sf::Time dt);
 	void draw();
 	CommandQueue& getCommandQueue();
@@ -36,6 +37,7 @@ private:
 	sf::View mWorldView;
 	TextureHolder mTextures;
 	FontHolder& mFonts;
+	SoundPlayer& mSounds;
 	SceneNode mSceneGraph;
 	std::array<SceneNode*, LayerCount> mSceneLayers;
 	CommandQueue mCommandQueue;
@@ -52,6 +54,7 @@ private:
 	void adaptPlayerPosition(); // when player moves out of screen
 	void adaptPlayerVelocity();
 	void handleCollisions();
+	void updateSounds();
 	void buildScene();
 	void addEnemies();
 	void addEnemy(Aircraft::Type type, float relX, float relY);

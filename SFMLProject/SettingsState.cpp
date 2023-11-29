@@ -16,7 +16,7 @@ SettingsState::SettingsState(StateStack& stack, Context context) :
 	updateLabels();
 
 	auto backButton = std::make_shared<GUI::Button>(context);
-	backButton->setPosition(80.f, 375.f);
+	backButton->setPosition(80.f, 620.f);
 	backButton->setText("Back");
 	//backButton->setCallback(std::bind(&SettingsState::requestStackPop, this));
 	backButton->setCallback([this]() {

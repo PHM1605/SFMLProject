@@ -10,7 +10,7 @@
 const sf::Time Application::timePerFrame = sf::seconds(1.f / 60.f);
 
 Application::Application()
-	: mWindow(sf::VideoMode(640, 480), "Gameplay", sf::Style::Close),
+	: mWindow(sf::VideoMode(1024, 768), "Audio", sf::Style::Close),
 	mTextures(),
 	mFonts(),
 	mPlayer(),

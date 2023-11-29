@@ -4,6 +4,8 @@
 #include <list>
 #include <cmath>
 
+
+// Note: Linker Input these files: https://www.sfml-dev.org/tutorials/2.6/start-vc.php
 class SoundPlayer : private sf::NonCopyable {
 public:
 	SoundPlayer();
