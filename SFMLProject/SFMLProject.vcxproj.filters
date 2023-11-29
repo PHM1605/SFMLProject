@@ -123,6 +123,15 @@
     <ClCompile Include="SoundPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiplayerGameState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.hpp">
@@ -245,6 +254,18 @@
     <ClInclude Include="SoundPlayer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameServer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiplayerGameState.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundNode.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkProtocol.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
@@ -253,6 +274,8 @@
     <None Include="Media\Shaders\DownSample.frag" />
     <None Include="Media\Shaders\Fullpass.vert" />
     <None Include="Media\Shaders\GaussianBlur.frag" />
+    <None Include="Media\Music\MenuTheme.ogg" />
+    <None Include="Media\Music\MissionTheme.ogg" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Media\Sansation.ttf" />
@@ -318,5 +341,28 @@
     <Image Include="Media\Textures\Particle.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Media\Sound\AlliedGunfire.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Media\Sound\Button.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Media\Sound\CollectPickup.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Media\Sound\EnemyGunfire.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Media\Sound\Explosion1.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Media\Sound\Explosion2.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Media\Sound\LaunchMissile.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

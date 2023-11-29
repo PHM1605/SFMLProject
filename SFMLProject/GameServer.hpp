@@ -7,6 +7,9 @@ class GameServer {
 public:
 	GameServer(sf::Vector2f battlefieldSize);
 	~GameServer();
+	void notifyPlayerSpawn(sf::Int32 aircraftIdentifier);
+	// ADD MORE HERE
+
 private:
 	struct RemotePeer {
 		RemotePeer();

@@ -199,6 +199,7 @@
     <ClInclude Include="MenuState.hpp" />
     <ClInclude Include="MultiplayerGameState.hpp" />
     <ClInclude Include="MusicPlayer.hpp" />
+    <ClInclude Include="NetworkProtocol.hpp" />
     <ClInclude Include="ParallelTask.hpp" />
     <ClInclude Include="Particle.hpp" />
     <ClInclude Include="ParticleNode.hpp" />
