@@ -2,13 +2,17 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include "NetworkProtocol.hpp"
+#include "Utility.hpp"
+#include "Aircraft.hpp"
 
 class GameServer {
 public:
 	GameServer(sf::Vector2f battlefieldSize);
 	~GameServer();
+	// Notify ALL players about one aircraft's change
 	void notifyPlayerSpawn(sf::Int32 aircraftIdentifier);
-	// ADD MORE HERE
+	void notifyPlayerRealtimeChange(sf::Int32 aircraftIdentifier, sf::Int32 action, bool actionEnabled);
+	void notifyPlayerEvent(sf::Int32 aircraftIdentifier, sf::Int32 action);
 
 private:
 	struct RemotePeer {
@@ -23,7 +27,7 @@ private:
 		sf::Vector2f position;
 		sf::Int32 hitpoints;
 		sf::Int32 missileAmmo;
-		std::map<sf::Int32, bool> realtimeActions;
+		std::map<sf::Int32, bool> realtimeActions; // which Action (MoveLeft, MoveRight...) of that Aircraft is un/activated (true/false)
 	};
 	typedef std::unique_ptr<RemotePeer> PeerPtr;
 private:
@@ -41,7 +45,7 @@ private:
 	void informWorldState(sf::TcpSocket& socket); // send World state to a Client
 	void broadcastMessage(const std::string& message); // send a string message to all Clients to be printed on screen
 	void sendToAll(sf::Packet& packet);
-	void updateClientState();
+	void updateClientState(); // send to all Peers the state of all Aircrafts
 
 private:
 	sf::Thread mThread;

@@ -3,6 +3,7 @@
 #include "CommandQueue.hpp"
 class Player {
 public:
+	typedef PlayerAction::Type Action;
 	enum Action {
 		MoveLeft, MoveRight, MoveUp, MoveDown, Fire, LaunchMissile, ActionCount
 	};
