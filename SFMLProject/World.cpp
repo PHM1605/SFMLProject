@@ -1,6 +1,6 @@
 #include "World.hpp"
 
-World::World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds):
+World::World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds, bool networked):
 	mTarget(outputTarget),
 	mSceneTexture(),
 	mWorldView(outputTarget.getDefaultView()),
@@ -14,7 +14,8 @@ World::World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sou
 	mScrollSpeed(-50.f),
 	mPlayerAircraft(nullptr),
 	mEnemySpawnPoints(),
-	mActiveEnemies()
+	mActiveEnemies(),
+	mNetworkedWorld(networked)
 {
 	mSceneTexture.create(mTarget.getSize().x, mTarget.getSize().y);
 	loadTextures();

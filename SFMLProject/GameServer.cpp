@@ -250,13 +250,35 @@ void GameServer::handleIncomingPacket(sf::Packet& packet, RemotePeer& receivingP
 			mAircraftIdentifierCounter++;
 		} break;
 
+		case Client::PositionUpdate: {
+			sf::Int32 numAircrafts;
+			packet >> numAircrafts;
+			for (sf::Int32 i = 0; i < numAircrafts; ++i) {
+				sf::Int32 aircraftIdentifier;
+				sf::Int32 aircraftHitpoints;
+				sf::Int32 missileAmmo;
+				sf::Vector2f aircraftPosition;
+				packet >> aircraftIdentifier >> aircraftPosition.x >> aircraftPosition.y >> aircraftHitpoints >> missileAmmo;
+				mAircraftInfo[aircraftIdentifier].position = aircraftPosition;
+				mAircraftInfo[aircraftIdentifier].hitpoints = aircraftHitpoints;
+				mAircraftInfo[aircraftIdentifier].missileAmmo = missileAmmo;
+			}
+		} break;
+
 		// Only used for enemy explosion event for now. Listen only for the first Peer (host)
 		case Client::GameEvent: {
 			sf::Int32 action;
 			float x, y;
 			packet >> action >> x >> y;
 			// When enemy exploding, spawn pickup at random rate
-			if(action == GameActions::)
+			if (action == GameActions::EnemyExplode && randomInt(3) == 0 && &receivingPeer == mPeers[0].get()) {
+				sf::Packet packet;
+				packet << static_cast<sf::Int32>(Server::SpawnPickup);
+				packet << static_cast<sf::Int32>(randomInt(Pickup::TypeCount));
+				packet << x;
+				packet << y;
+				sendToAll(packet);
+			}
 		}
 	}
 }

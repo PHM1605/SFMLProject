@@ -3,6 +3,7 @@
 #include <SFML/Network.hpp>
 #include "World.hpp"
 #include "GameServer.hpp"
+#include <fstream>
 
 class MultiplayerGameState : public State {
 public:

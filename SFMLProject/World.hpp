@@ -16,7 +16,7 @@
 
 class World : private sf::NonCopyable {
 public:
-	World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds);
+	World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds, bool networked = false);
 	void update(sf::Time dt);
 	void draw();
 	CommandQueue& getCommandQueue();
@@ -63,5 +63,5 @@ private:
 	void guideMissiles();
 	sf::FloatRect getViewBounds() const;
 	sf::FloatRect getBattlefieldBounds() const;
-
+	bool mNetworkedWorld;
 };

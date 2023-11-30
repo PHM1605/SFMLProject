@@ -19,13 +19,26 @@ namespace Server {
 	};
 }
 
+// For packets originated from the Client
 namespace Client {
 	enum PacketType {
 		PlayerEvent, // AircraftID, EventID (in Player)
 		PlayerRealtimeChange, // AircraftID, EventID, bool to state this Event is active or not
 		RequestCoopPartner, // no body; when Client presses the Return key 
 		PositionUpdate, // NumberOfAircrafts, for each Aircraft -> AircraftID, two floats of position (from Client tick code)
-		GameEvent, // e.g. enemy explosion
+		GameEvent, // e.g. enemy explosion; GameActions::Type (enum), two floats of explosion position
 		Quit // no body; to inform Server that game is over -> for Server to remove Aircraft
+	};
+}
+
+namespace GameActions {
+	enum Type { EnemyExplode };
+	struct Action {
+		Action() {}
+		Action(Type type, sf::Vector2f position) :
+			type(type),
+			position(position) {}
+		Type type;
+		sf::Vector2f position;
 	};
 }
