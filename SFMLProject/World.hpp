@@ -13,15 +13,44 @@
 #include "PostEffect.hpp"
 #include "BloomEffect.hpp"
 #include "SoundPlayer.hpp"
+#include "NetworkNode.hpp"
 
 class World : private sf::NonCopyable {
 public:
 	World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds, bool networked = false);
 	void update(sf::Time dt);
 	void draw();
+	sf::FloatRect getViewBounds() const;
 	CommandQueue& getCommandQueue();
+	Aircraft* addAircraft(int identifier);
+	void removeAircraft(int identifier);
+	void setCurrentBattleFieldPosition(float lineY);
+	void setWorldHeight(float height);
+	void addEnemy(Aircraft::Type type, float relX, float relY);
+	void sortEnemies();
+
 	bool hasAlivePlayer() const;
-	bool hasPlayerReachEnd() const;
+	bool hasPlayerReachedEnd() const;
+
+	void setWorldScrollCompensation(float compensation); // for lagging
+	Aircraft* getAircraft(int identifier) const;
+	sf::FloatRect getBattlefieldBounds() const;
+
+	void createPickup(sf::Vector2f position, Pickup::Type type);
+	bool pollGameAction(GameActions::Action& out);
+
+private:
+	void loadTextures();
+	void adaptPlayerPosition(); // when player moves out of screen
+	void adaptPlayerVelocity();
+	void handleCollisions();
+	void updateSounds();
+	void buildScene();
+	void addEnemies();
+
+	void spawnEnemies();
+	void destroyEntitiesOutsideView();
+	void guideMissiles();
 
 private:
 	enum Layer { Background, LowerAir, UpperAir, LayerCount };
@@ -32,6 +61,7 @@ private:
 		SpawnPoint(Aircraft::Type type, float x, float y) :
 			type(type), x(x), y(y) {}
 	};
+private:
 	sf::RenderTarget& mTarget;
 	sf::RenderTexture mSceneTexture; // scene buffer - for post effect
 	sf::View mWorldView;
@@ -44,24 +74,12 @@ private:
 	sf::FloatRect mWorldBounds;
 	sf::Vector2f mSpawnPosition;
 	float mScrollSpeed;
-	Aircraft* mPlayerAircraft;
+	float mScrollSpeedCompensation;
+	std::vector<Aircraft*> mPlayerAircrafts;
 	std::vector<SpawnPoint> mEnemySpawnPoints;
 	std::vector<Aircraft*> mActiveEnemies;
 	BloomEffect mBloomEffect;
-	
-private:
-	void loadTextures();
-	void adaptPlayerPosition(); // when player moves out of screen
-	void adaptPlayerVelocity();
-	void handleCollisions();
-	void updateSounds();
-	void buildScene();
-	void addEnemies();
-	void addEnemy(Aircraft::Type type, float relX, float relY);
-	void spawnEnemies();
-	void destroyEntitiesOutsideView();
-	void guideMissiles();
-	sf::FloatRect getViewBounds() const;
-	sf::FloatRect getBattlefieldBounds() const;
 	bool mNetworkedWorld;
+	NetworkNode* mNetworkNode;
+	SpriteNode* mFinishSprite;
 };

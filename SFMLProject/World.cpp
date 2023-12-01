@@ -1,6 +1,6 @@
 #include "World.hpp"
 
-World::World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds, bool networked):
+World::World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sounds, bool networked) :
 	mTarget(outputTarget),
 	mSceneTexture(),
 	mWorldView(outputTarget.getDefaultView()),
@@ -10,12 +10,15 @@ World::World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sou
 	mSceneGraph(),
 	mSceneLayers(),
 	mWorldBounds(0.f, 0.f, mWorldView.getSize().x, 5000),
-	mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y/2.f),
+	mSpawnPosition(mWorldView.getSize().x / 2.f, mWorldBounds.height - mWorldView.getSize().y / 2.f),
 	mScrollSpeed(-50.f),
-	mPlayerAircraft(nullptr),
+	mScrollSpeedCompensation(1.f),
+	mPlayerAircrafts(),
 	mEnemySpawnPoints(),
 	mActiveEnemies(),
-	mNetworkedWorld(networked)
+	mNetworkedWorld(networked),
+	mNetworkNode(nullptr),
+	mFinishSprite(nullptr)
 {
 	mSceneTexture.create(mTarget.getSize().x, mTarget.getSize().y);
 	loadTextures();
@@ -23,8 +26,14 @@ World::World(sf::RenderTarget& outputTarget, FontHolder& fonts, SoundPlayer& sou
 	mWorldView.setCenter(mSpawnPosition);
 }
 
+void World::setWorldScrollCompensation(float compensation) {
+	mScrollSpeedCompensation = compensation;
+}
+
 void World::update(sf::Time dt) {
-	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds());
+	mWorldView.move(0.f, mScrollSpeed * dt.asSeconds() * mScrollSpeedCompensation);
+
+
 	mPlayerAircraft->setVelocity(0.f, 0.f);
 	destroyEntitiesOutsideView();
 	guideMissiles();

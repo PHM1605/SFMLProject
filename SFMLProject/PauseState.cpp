@@ -1,11 +1,12 @@
 #include "PauseState.hpp"
 
 // Note: PauseState will always return false to disabled StateStack running underlying GameState
-PauseState::PauseState(StateStack& stack, Context context) :
+PauseState::PauseState(StateStack& stack, Context context, bool letUpdatesThrough) :
 	State(stack, context),
 	mBackgroundSprite(),
 	mPausedText(),
-	mGUIContainer()
+	mGUIContainer(),
+	mLetUpdatesThrough(letUpdatesThrough)
 {
 	sf::Font& font = context.fonts->get(Fonts::Main);
 	sf::Vector2f windowSize(context.window->getSize());

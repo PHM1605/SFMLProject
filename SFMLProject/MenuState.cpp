@@ -8,12 +8,28 @@ MenuState::MenuState(StateStack& stack, Context context) :
 	mBackgroundSprite.setTexture(texture);
 
 	auto playButton = std::make_shared<GUI::Button>(context);
-	playButton->setPosition(100, 250);
+	playButton->setPosition(100, 300);
 	playButton->setText("Play");
 	playButton->setCallback([this]() 
 		{
 			requestStackPop();
 			requestStackPush(States::Game); 
+		});
+
+	auto hostPlayButton = std::make_shared<GUI::Button>(context);
+	hostPlayButton->setPosition(100, 350);
+	hostPlayButton->setText("Host");
+	hostPlayButton->setCallback([this]() {
+		requestStackPop();
+		requestStackPush(States::HostGame);
+		});
+
+	auto joinPlayButton = std::make_shared<GUI::Button>(context);
+	joinPlayButton->setPosition(100, 400);
+	joinPlayButton->setText("Join");
+	joinPlayButton->setCallback([this]() {
+		requestStackPop();
+		requestStackPush(States::JoinGame);
 		});
 
 	auto settingsButton = std::make_shared<GUI::Button>(context);
@@ -32,6 +48,8 @@ MenuState::MenuState(StateStack& stack, Context context) :
 			requestStackPop();
 		});
 	mGUIContainer.pack(playButton);
+	mGUIContainer.pack(hostPlayButton);
+	mGUIContainer.pack(joinPlayButton);
 	mGUIContainer.pack(settingsButton);
 	mGUIContainer.pack(exitButton);
 	context.music->play(Music::MenuTheme);

@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "ResourceIdentifiers.hpp"
+#include "KeyBinding.hpp"
+#include "StateStack.hpp"
 #include "ResourceHolder.hpp"
 #include "StateStack.hpp"
 #include "MusicPlayer.hpp"
@@ -21,9 +23,10 @@ private:
 	sf::RenderWindow mWindow;
 	TextureHolder mTextures;
 	FontHolder mFonts;
-	Player mPlayer;
 	MusicPlayer mMusic;
 	SoundPlayer mSounds;
+	KeyBinding mKeyBinding1;
+	KeyBinding mKeyBinding2; 
 	StateStack mStateStack;
 	sf::Text mStatisticsText;
 	sf::Time mStatisticsUpdateTime;

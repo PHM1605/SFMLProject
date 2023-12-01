@@ -9,20 +9,21 @@
 #include <memory>
 
 class StateStack;
-
+class KeyBinding;
 
 class State {
 public:
 	typedef std::unique_ptr<State> Ptr;
 
 	struct Context {
-		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, Player& player, MusicPlayer& music, SoundPlayer& sounds);
+		Context(sf::RenderWindow& window, TextureHolder& textures, FontHolder& fonts, MusicPlayer& music, SoundPlayer& sounds, KeyBinding& key1, KeyBinding& key2);
 		sf::RenderWindow* window;
 		TextureHolder* textures;
 		FontHolder* fonts;
-		Player* player;
 		MusicPlayer* music;
 		SoundPlayer* sounds;
+		KeyBinding* keys1; 
+		KeyBinding* keys2;
 	};
 public:
 	State(StateStack& stack, Context context);
